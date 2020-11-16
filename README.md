@@ -7,7 +7,7 @@ docker環境（docker, docker-compose）を用意してください
 
 [docker公式サイト](https://docs.docker.jp/get-docker.html)
 
-## 動作方法
+## 動作方法(コマンドを使用)
 
 まず，本コードをローカル環境にクローンしてください（ダウンロードみたいなもの）
 
@@ -40,6 +40,32 @@ dockerコンテナに入ったら
 cd src/api/
 ```
 API起動（開発用）
+```
+node app.js
+```
+
+## 動作方法(VScodeを使用)
+
+以下のサイトからダウンロードしてください
+[vscode公式サイト](https://azure.microsoft.com/ja-jp/products/visual-studio-code/)
+
+必要な拡張機能(vscode)
+拡張機能ボタンを押し下記のワードで検索
+Docker　(ms-azuretools.vscode-docker
+
+Remote - Containers　(ms-vscode-remote.remote-containers
+
+左下の緑のボタンが追加されたらOK（されない場合はVScodeを再起動）
+
+緑のボタンを押し,Remote-Containenr:Open Folder in Containerを押す
+
+コンテナ起動　起動完了
+
+vscode内のターミナル表示
+```
+cd node/src/api/
+```
+API起動（開発時）
 ```
 node app.js
 ```
