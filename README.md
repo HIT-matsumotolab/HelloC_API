@@ -2,12 +2,11 @@
 Dockerコンテナ上で動作するhelloCに関するAPIです
 
 docker環境（docker, docker-compose）を用意してください
+（できればgitも使ってくれるとありがたい）
 
 導入の仕方は下記のリンクに乗ってます！！（わからなければ大野へ）
 
 [docker公式サイト](https://docs.docker.jp/get-docker.html)
-
-## 動作方法(コマンドを使用)
 
 まず，本コードをローカル環境にクローンしてください（ダウンロードみたいなもの）
 
@@ -16,6 +15,9 @@ docker環境（docker, docker-compose）を用意してください
 自分のクローン先リンク/helloC_API/mysql/docker-entrypoint-initdb.d
 ```
 
+helloC_APIファルダ直下の.envファイルの中身を変更してくだい
+
+## 動作方法(コマンドを使用)
 クローン先のディレクトリに入って
 
 dockerを起動してください（初回は時間がかかります）
