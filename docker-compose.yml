@@ -5,10 +5,12 @@ services:
     build:
       context: ./node
     volumes:
-      - ./src:/src
+      - node/src:/src
     ports:
       - ${IP_ADDRESS}:3000:3000
     stdin_open: true
+    working_dir: /src/api
+    command: node i
   phpmyadmin:
     build:
       context: ./phpmyadmin
