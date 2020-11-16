@@ -64,6 +64,7 @@ node app.js
 コンテナ起動　起動完了
 
 vscode内のターミナル表示して以下のコマンドを打つ
+
 ディレクトリ移動
 ```
 cd node/src/api/
