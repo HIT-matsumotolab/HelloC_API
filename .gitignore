@@ -3,5 +3,5 @@ mysql/docker-entrypoint-initdb.d/*
 !.gitkeep
 mysql/mysql_data/*
 !.gitkeep
-src/node_modules/
+node/src/node_modules/
 
