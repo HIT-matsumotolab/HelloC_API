@@ -25,13 +25,12 @@ function initialize(passport) {
     const user = {
       id: sqlResult.user_id,
       name: sqlResult.name,
-      password: 'test',//sqlResult.password
+      password: sqlResult.password,
       authority: sqlResult.authority
     };
 
     try {
-      //if (await bcrypt.compare(password, user.password)) {
-      if (password === user.password) {
+      if (await bcrypt.compare(password, user.password)) {
         return done(null, user);
       } else {
         return done(null, false, { message: 'Password incorrect' });
