@@ -5,7 +5,7 @@ services:
     build:
       context: ./node
     volumes:
-      - node/src:/src
+      - ./node/src:/src
     ports:
       - ${IP_ADDRESS}:3000:3000
     stdin_open: true
