@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  node:
+    build:
+      context: ./node
+    volumes:
+      - ./src:/src
+    ports:
+      - ${IP_ADDRESS}:3000:3000
+    stdin_open: true
+  phpmyadmin:
+    build:
+      context: ./phpmyadmin
+    ports:
+      - ${IP_ADDRESS}:8080:80
+  mysql:
+    build:
+      context: ./mysql
+    volumes:
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      #- ./mysql/mysql_data:/var/lib/mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --secure-file-priv="/docker-entrypoint-initdb.d"

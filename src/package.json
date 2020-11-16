@@ -1,0 +1,24 @@
+{
+  "name": "helloc_api",
+  "version": "1.0.0",
+  "description": "helloc_API",
+  "main": "api/api.js",
+  "scripts": {
+    "test": "nodemon api/api.js"
+  },
+  "author": "helloC_team",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.1",
+    "method-override": "^3.0.0",
+    "mysql2": "^2.2.5",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0"
+  }
+}
