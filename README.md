@@ -50,7 +50,9 @@ node app.js
 [vscode公式サイト](https://azure.microsoft.com/ja-jp/products/visual-studio-code/)
 
 必要な拡張機能(vscode)
+
 拡張機能ボタンを押し下記のワードで検索
+
 Docker　(ms-azuretools.vscode-docker
 
 Remote - Containers　(ms-vscode-remote.remote-containers
