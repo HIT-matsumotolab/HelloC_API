@@ -53,9 +53,9 @@ node app.js
 
 拡張機能ボタンを押し下記のワードで検索
 
-Docker　(ms-azuretools.vscode-docker
+-Docker　(ms-azuretools.vscode-docker
 
-Remote - Containers　(ms-vscode-remote.remote-containers
+-Remote - Containers　(ms-vscode-remote.remote-containers
 
 左下の緑のボタンが追加されたらOK（されない場合はVScodeを再起動）
 
