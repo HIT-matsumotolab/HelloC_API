@@ -7,6 +7,7 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const bodyParser = require('body-parser');
 
 const mysqlconfig = require('./models/mysqlConnection')
 const mysql = require('mysql2');
@@ -30,8 +31,8 @@ app.use(methodOverride('_method'))
 app.use(function (req, res, next) {
   const allowedOrigins = process.env.IP_ADDRESS;
   const origin = req.headers.origin;
-  if(allowedOrigins.indexOf(origin) > -1){
-       res.setHeader('Access-Control-Allow-Origin', origin);
+  if (allowedOrigins.indexOf(origin) > -1) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -39,7 +40,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-
+app.use(bodyParser.json());
 //curl -X POST -d "name=test" -d "password=test" http://localhost:3000/login
 app.post('/login', function (req, res, next) {
 
@@ -68,8 +69,8 @@ app.delete('/logout', (req, res) => {
 })
 
 
-app.use('/api/test/', checkAuth.Authenticated, require('./routes/test'));
-//app.use('/api/manager/', checkAuth.Authenticated,require('./routes/manager'));
+app.use('/api/test/', require('./routes/test'));
+app.use('/api/manager/', require('./routes/manager'));
 //app.use('/api/rtv/', checkAuth.Authenticated,require('./routes/rtv'));
 
 
