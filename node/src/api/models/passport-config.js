@@ -1,10 +1,10 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const mysqlconfig = require('./mysqlConnection');
+const dbconfig = require('./mysqlConnection');
 const mysql = require('mysql2/promise');
 
 async function SQL(statement, placeholder) {
-  const connection = await mysql.createConnection(mysqlconfig);
+  const connection = await mysql.createConnection(dbconfig);
   try {
     const [rows, fields] = await connection.query(statement, placeholder);
     return rows[0];
