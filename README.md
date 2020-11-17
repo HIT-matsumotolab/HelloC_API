@@ -2,7 +2,7 @@
 Dockerコンテナ上で動作するhelloCに関するAPIです
 
 docker環境（docker, docker-compose）を用意してください
-（できればgitも使ってくれるとありがたい）
+（できればgitとGitHubも使ってくれるとありがたい）
 
 導入の仕方は下記のリンクに乗ってます！！（わからなければ大野へ）
 
