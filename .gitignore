@@ -1,7 +1,10 @@
 .devcontainer/
 mysql/docker-entrypoint-initdb.d/*
 !.gitkeep
+
 mysql/mysql_data/*
 !.gitkeep
+
 node/src/node_modules/
 
+.vscode/
