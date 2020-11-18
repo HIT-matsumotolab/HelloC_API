@@ -70,7 +70,7 @@ app.delete('/logout', (req, res) => {
 
 
 app.use('/api/test/', require('./routes/test'));
-app.use('/api/manager/', require('./routes/manager'));
+app.use('/api/manager/',checkAuth.Authenticated, require('./routes/manager'));
 //app.use('/api/rtv/', checkAuth.Authenticated,require('./routes/rtv'));
 
 
