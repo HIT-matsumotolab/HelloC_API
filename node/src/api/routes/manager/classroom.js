@@ -14,5 +14,15 @@ router.get('/', function (req, res) {
         );
     });
 });
+router.get('/:classID', function (req, res) {
+    connection.connect();
+    const statement = "select * from class where class_id="+req.params.classID;
+    connection.query(statement, function (err, result, fields) {
+        if (err) throw err;
+        res.json(
+            result
+        );
+    });
+});
 
 module.exports = router;
