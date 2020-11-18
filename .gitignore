@@ -1,4 +1,5 @@
 .devcontainer/
+
 mysql/docker-entrypoint-initdb.d/*
 !.gitkeep
 
