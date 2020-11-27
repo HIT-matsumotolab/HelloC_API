@@ -15,7 +15,7 @@ docker環境（docker, docker-compose）を用意してください
 自分のクローン先リンク/helloC_API/mysql/docker-entrypoint-initdb.d
 ```
 
-helloC_APIファルダ直下の.envファイルの中身を変更してくだい
+helloC_APIファルダ直下の.envファイルの中身を変更してください
 
 ## 動作方法(コマンドを使用)
 クローン先のディレクトリに入って
