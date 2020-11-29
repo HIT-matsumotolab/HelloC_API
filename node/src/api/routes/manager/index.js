@@ -7,6 +7,3 @@ router.use('/question', require('./question'));
 router.use('/register', require('./register'));
 
 module.exports = router;
-
-// ルーティングする場合
-// 
