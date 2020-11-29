@@ -9,3 +9,5 @@ mysql/mysql_data/*
 node/src/node_modules/
 
 .vscode/
+
+.env
