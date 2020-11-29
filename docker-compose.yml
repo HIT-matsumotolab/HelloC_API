@@ -8,6 +8,7 @@ services:
       - ./node/src:/src
     ports:
       - ${IP_ADDRESS}:3000:3000
+    command: npm install --save
     stdin_open: true
   phpmyadmin:
     build: ./phpmyadmin
