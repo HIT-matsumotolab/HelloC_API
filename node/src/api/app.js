@@ -41,7 +41,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(bodyParser.json());
-//curl -X POST -d "name=test" -d "password=test" http://localhost:3000/login
+//curl -X POST -d "name=test" -d "password=任意のパスワード" http://localhost:3000/login
 app.post('/login', function (req, res, next) {
 
   passport.authenticate('local', function (err, user, info) {
