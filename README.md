@@ -75,4 +75,3 @@ API起動（開発時）
 ```
 node app.js
 ```
-aaa test
