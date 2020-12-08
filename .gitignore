@@ -11,3 +11,4 @@ node/src/node_modules/
 .vscode/
 
 .env
+!node/src/.env 

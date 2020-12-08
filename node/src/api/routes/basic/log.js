@@ -17,7 +17,7 @@ router.get('/result/:question_id', function (req, res) {
 
 router.get('/process/:result_id', function (req, res) {
     connection.connect();
-    const statement = "select * from logs_progress where result_id=" + req.params.result_id;
+    const statement = "select * from logs_process where result_id=" + req.params.result_id;
     connection.query(statement, function (err, result, fields) {
         if (err) throw err;
         res.json(
