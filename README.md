@@ -4,7 +4,7 @@ Dockerコンテナ上で動作するhelloCに関するAPIです
 docker環境（docker, docker-compose）を用意してください
 （できればgitとGitHubも使ってくれるとありがたい）
 
-導入の仕方は下記のリンクに乗ってます！！（わからなければ大野へ）
+導入の仕方は下記のリンクに載っています！！（わからなければ大野へ）
 
 [docker公式サイト](https://docs.docker.jp/get-docker.html)
 
@@ -76,3 +76,5 @@ API起動（開発時）
 node app.js
 ```
 aaa test
+
+
