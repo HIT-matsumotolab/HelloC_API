@@ -39,11 +39,11 @@ docker-compose node exec bash
 
 dockerコンテナに入ったら
 ```
-cd src/api/
+cd src
 ```
 API起動（開発用）
 ```
-node app.js
+node api/app.js
 ```
 
 ## 動作方法(VScodeを使用)
