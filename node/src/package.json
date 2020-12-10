@@ -2,9 +2,9 @@
   "name": "helloc_api",
   "version": "1.0.0",
   "description": "helloc_API",
-  "main": "api/api.js",
+  "main": "api/app.js",
   "scripts": {
-    "test": "nodemon api/api.js"
+    "dev": "node api/api.js"
   },
   "author": "helloC_team",
   "license": "ISC",
