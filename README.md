@@ -69,9 +69,9 @@ vscode内のターミナル表示して以下のコマンドを打つ
 
 ディレクトリ移動
 ```
-cd node/src/api/
+cd node/src
 ```
 API起動（開発時）
 ```
-node app.js
+node api/app.js
 ```
