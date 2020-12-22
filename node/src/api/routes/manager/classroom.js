@@ -8,7 +8,11 @@ router.get('/', function (req, res) {
     connection.connect();
     const statement = "select * from class";
     connection.query(statement, function (err, result, fields) {
-        if (err) throw err;
+        if (err){
+            res.json(
+                err
+            );
+        }
         res.json(
             result
         );
