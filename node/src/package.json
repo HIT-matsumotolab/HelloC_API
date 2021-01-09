@@ -4,7 +4,7 @@
   "description": "helloc_API",
   "main": "api/app.js",
   "scripts": {
-    "dev": "node api/api.js"
+    "dev": "node api/app.js"
   },
   "author": "helloC_team",
   "license": "ISC",
