@@ -130,7 +130,6 @@ router.get('/code/:test_id', function (req, res) {
                 result
             );
         }
-        console.log(result);
     });
 });
 
