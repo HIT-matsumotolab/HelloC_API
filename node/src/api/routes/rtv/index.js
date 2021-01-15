@@ -63,7 +63,7 @@ router.get('/ranking/:question_id', function (req, res) {
     });
 });
 
-router.get('/code/:test_id', function (req, res) {
+router.get('/code/:question_id', function (req, res) {
     connection.connect();
     // const statement = "select * from logs_result inner join logs_process on logs_result.result_id = logs_process.result_id where question_id =" + req.params.question_id +" and result=1";
 
@@ -97,6 +97,7 @@ router.get('/code/:test_id', function (req, res) {
 
     const statement = ` select 	
                             t.test_id,
+                            lr.question_id,
                             u.name, 
                             lp.answer_code 
                         from logs_process lp 
@@ -106,8 +107,8 @@ router.get('/code/:test_id', function (req, res) {
                         on lp.result_id = lr.result_id 
                             and lr.user_id = u.user_id 
                             and lr.test_id = t.test_id 
-                        where t.test_id = 
-                            `+ req.params.test_id +`
+                        where lr.question_id = 
+                            `+ req.params.question_id +`
                             and result=1 
                         and lp.process_id =(select max(tmplp.process_id) 
                             from logs_process tmplp 
@@ -118,8 +119,8 @@ router.get('/code/:test_id', function (req, res) {
                             and tmplr.user_id = tmpu.user_id 
                             and tmplr.test_id = tmpt.test_id 
                             where	tmplr.user_id = lr.user_id 
-                            and tmpt.test_id = 
-                            `+ req.params.test_id +` 
+                            and tmplr.question_id = 
+                            `+ req.params.question_id +` 
                             and result=1 
                             group by tmplr.user_id)`;
     connection.query(statement, function (err, result, fields) {
