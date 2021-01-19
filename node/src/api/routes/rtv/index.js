@@ -47,6 +47,20 @@ router.get('/logs_process/:result_id', function (req, res) {
     });
 });
 
+router.get('/input/:question_id', function (req, res) {
+    connection.connect();
+    const statement = "select input from questions where question_id=" + req.params.question_id;
+    connection.query(statement, function (err, result, fields) {
+        if (err){
+            res.json(err);
+        }else{
+            res.json(
+                result
+            );
+        }
+    });
+});
+
 router.get('/ranking/:question_id', function (req, res) {
     connection.connect();
     // const statement = "select * from logs_result inner join logs_process on logs_result.result_id = logs_process.result_id where question_id =" + req.params.question_id +" and result=1";
