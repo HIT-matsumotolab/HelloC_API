@@ -1,4 +1,3 @@
-
 import { initModels } from "../models/init-models.js";
 
 const sequelize = require("../config/database");
@@ -6,6 +5,7 @@ const models = initModels(sequelize);
 
 const Group = models.groups;
 const Membership = models.membership;
+const Collection = models.collection;
 
 exports.getGroupList = async (req, res) => {
     Group.findAll()
@@ -113,3 +113,33 @@ exports.removeUser = async (req, res) => {
         });
 };
 
+exports.addBook = async (req, res) => {
+    Collection.create({
+        group_id: req.body.group_id,
+        book_id: req.body.book_id
+    })
+        .then(collection => {
+            return res.send(collection);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
+
+exports.removeBook = async (req, res) => {
+    Collection.findOne({
+        where: {
+            group_id: req.body.group_id,
+            book_id: req.body.book_id
+        }
+    })
+        .then(collection => {
+            collection.destroy();
+            return res.send('削除');
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};

@@ -2,18 +2,15 @@ import { Router } from 'express';
 const group = require('../controllers/group.controller');
 const router = Router();
 
-router.get('/', group.getGroupList);
-
-router.get('/:id', group.getGroup);
-
-router.post('/', group.createGroup);
-
-router.post('/addUser', group.addUser);
-
-router.post('/removeUser', group.removeUser);
-
-router.delete('/:id', group.deleteGroup); 
-
-router.put('/:id', group.updateGroup);
+router
+    .get('/', group.getGroupList)
+    .get('/:id', group.getGroup)
+    .post('/', group.createGroup)
+    .post('/addUser', group.addUser)
+    .post('/addBook', group.addBook)
+    .post('/removeUser', group.removeUser)
+    .post('/removeBook', group.removeBook)
+    .delete('/:id', group.deleteGroup)
+    .put('/:id', group.updateGroup)
 
 export default router;
