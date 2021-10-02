@@ -4,7 +4,7 @@ sudo apt update && sudo apt upgrade -y
 ```
 
 ```
-https://github.com/HIT-matsumotolab/HelloC_API.git
+git clone https://github.com/HIT-matsumotolab/HelloC_API.git
 ```
 
 # Nodejs v16のインストール
