@@ -16,7 +16,7 @@ app.get('/status', (req, res) => {
 })
 
 
-app.use('/', routes);
+app.use('/api', routes);
 
 app.listen(4000, () => {
   console.log(`Example app listening on port 4000!`);
