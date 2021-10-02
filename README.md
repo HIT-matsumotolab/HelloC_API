@@ -52,7 +52,7 @@ psql
 ```
 postgresロールのパスワード変更（本番環境ではユーザを作成してください）
 ```
-ALTER USER postgres WITH PASSWORD '新しいパスワード';
+ALTER USER postgres WITH PASSWORD 'password';
 ```
 psqlを抜ける
 ```
