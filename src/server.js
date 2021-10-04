@@ -19,5 +19,5 @@ app.get('/status', (req, res) => {
 app.use('/api', routes);
 
 app.listen(4000, () => {
-  console.log(`Example app listening on port 4000!`);
+  console.log(`server: http://localhost:4000/`);
 });

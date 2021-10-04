@@ -46,7 +46,7 @@ exports.createUser = async (req, res) => {
     role: req.body.role
   })
     .then(user => {
-      console.log(user.user_id);
+      // console.log(user.user_id);
       return res.send([user.user_id]);
     })
     .catch((error) => {
@@ -86,7 +86,7 @@ exports.updateUser = async (req, res) => {
       where: { user_id: req.params.id }
     })
     .then(user => {
-      return res.send(user);
+      return res.send('updated!');
     })
     .catch((error) => {
       console.log("ERROR処理");
