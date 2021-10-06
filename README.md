@@ -1,4 +1,11 @@
-# 事前準備
+# Hello C API
+
+（説明が入る予定）
+
+## 事前準備
+
+Hello C API の開発に必要なパッケージをインストールする
+
 ```
 sudo apt update && sudo apt upgrade -y
 ```
@@ -7,15 +14,22 @@ sudo apt update && sudo apt upgrade -y
 git clone https://github.com/HIT-matsumotolab/HelloC_API.git
 ```
 
-# Nodejs v16のインストール
+※ このときに認証情報が確認される  
+※ `git` がない場合は `sudo apt install git` でインストールを行う
+
+### Node.js v16のインストール 
+
 ```
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 ```
+
 ```
 sudo apt install nodejs -y
 ```
 
-# PostgreSQL v13のインストール
+※ 余力があれば `nodebrew` などのツールを使っても良い
+
+### PostgreSQL v13のインストール
 ```
 sudo apt-get install curl ca-certificates gnupg -y
 ```
@@ -36,7 +50,7 @@ sudo apt install postgresql-13 -y
 sudo /etc/init.d/postgresql restart
 ```
 
-# postgresqlの設定
+#### PostgreSQLの設定
 
 postgresユーザーのパスワード変更
 ```
@@ -67,13 +81,17 @@ psql -f HelloC_API/initial-helloc-db.sql -Upostgres
 exit
 ```
 
-# env ファイル作成
+## env ファイル作成
+
+clone したレポジトリのカレントディレクトリに移動する。現状いるディレクトリ（≒カレントディレクトリ）から参照できる場合を前提とする。
+
 ```
 cd HelloC_API
 ```
 
 
-プロジェクトファイル直下に「.env」ファイルを作成してください
+プロジェクトファイル直下に「.env」ファイルを作成してください  
+もしくは `.env.sample` ファイルを複製し、 `.env` にした上で情報を書き換えてください
 ```
 POSTGRES_DB=helloc
 POSTGRES_USER=postgres
@@ -84,7 +102,7 @@ POSTGRES_PORT=5432
 POST=4000
 ```
 
-※すでに作ってあるのでしなくでいい　メモ程度
+※ すでに作ってあるのでしなくでいい　メモ程度
 ```
 npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x データベースパスワード -e postgresql -l esm -C
 ```
