@@ -13,10 +13,6 @@ export default class coding_archives extends Model {
         key: 'mirror_question_id'
       }
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     explain: {
       type: DataTypes.TEXT,
       allowNull: false

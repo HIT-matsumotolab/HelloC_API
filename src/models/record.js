@@ -22,6 +22,14 @@ export default class record extends Model {
       },
       unique: "record_book_id_question_id_key"
     },
+    open_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    close_time: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -43,7 +51,6 @@ export default class record extends Model {
       },
     ]
   });
-  record.removeAttribute('id');
   return record;
   }
 }

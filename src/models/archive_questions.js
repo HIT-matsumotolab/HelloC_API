@@ -10,6 +10,10 @@ export default class archive_questions extends Model {
       allowNull: false,
       primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     mirror_question_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

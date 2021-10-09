@@ -36,7 +36,6 @@ export default class membership extends Model {
       {
         name: "membership_user_id_group_id_key",
         unique: true,
-        primaryKey: true,
         fields: [
           { name: "user_id" },
           { name: "group_id" },
@@ -44,7 +43,6 @@ export default class membership extends Model {
       },
     ]
   });
-  membership.removeAttribute('id');
   return membership;
   }
 }

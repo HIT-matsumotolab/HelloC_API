@@ -43,7 +43,6 @@ export default class collection extends Model {
       },
     ]
   });
-  collection.removeAttribute('id');
   return collection;
   }
 }

@@ -13,10 +13,6 @@ export default class blank_select_questions extends Model {
         key: 'question_id'
       }
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     explain: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -33,6 +29,15 @@ export default class blank_select_questions extends Model {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    stdinout: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
+    max_exec_time: {
+      type: DataTypes.SMALLINT,
+      allowNull: false,
+      defaultValue: 2
+    },
     select_blank: {
       type: DataTypes.JSONB,
       allowNull: false
@@ -41,10 +46,6 @@ export default class blank_select_questions extends Model {
       type: DataTypes.JSONB,
       allowNull: false
     },
-    stdinout: {
-      type: DataTypes.JSONB,
-      allowNull: true
-    },
     hint_type: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -52,11 +53,6 @@ export default class blank_select_questions extends Model {
         model: 'blank_question_hints',
         key: 'hint_type'
       }
-    },
-    max_exec_time: {
-      type: DataTypes.SMALLINT,
-      allowNull: false,
-      defaultValue: 2
     }
   }, {
     sequelize,

@@ -10,6 +10,10 @@ export default class questions extends Model {
       allowNull: false,
       primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     format: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -13,10 +13,6 @@ export default class blank_select_archives extends Model {
         key: 'mirror_question_id'
       }
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     explain: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -31,14 +27,6 @@ export default class blank_select_archives extends Model {
     },
     base_code: {
       type: DataTypes.TEXT,
-      allowNull: false
-    },
-    select_blank: {
-      type: DataTypes.JSONB,
-      allowNull: false
-    },
-    correct_blank: {
-      type: DataTypes.JSONB,
       allowNull: false
     },
     stdinout: {
@@ -57,6 +45,14 @@ export default class blank_select_archives extends Model {
       type: DataTypes.SMALLINT,
       allowNull: false,
       defaultValue: 2
+    },
+    select_blank: {
+      type: DataTypes.JSONB,
+      allowNull: false
+    },
+    correct_blank: {
+      type: DataTypes.JSONB,
+      allowNull: false
     }
   }, {
     sequelize,

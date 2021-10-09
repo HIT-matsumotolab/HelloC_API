@@ -13,10 +13,6 @@ export default class coding_questions extends Model {
         key: 'question_id'
       }
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     explain: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -33,6 +29,15 @@ export default class coding_questions extends Model {
       type: DataTypes.TEXT,
       allowNull: true
     },
+    stdinout: {
+      type: DataTypes.JSONB,
+      allowNull: false
+    },
+    max_exec_time: {
+      type: DataTypes.SMALLINT,
+      allowNull: false,
+      defaultValue: 2
+    },
     model_answer: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -45,18 +50,9 @@ export default class coding_questions extends Model {
         key: 'judge_format'
       }
     },
-    stdinout: {
-      type: DataTypes.JSONB,
-      allowNull: false
-    },
     mandatory_words: {
       type: DataTypes.STRING,
       allowNull: true
-    },
-    max_exec_time: {
-      type: DataTypes.SMALLINT,
-      allowNull: false,
-      defaultValue: 2
     },
     mini_lines: {
       type: DataTypes.SMALLINT,
