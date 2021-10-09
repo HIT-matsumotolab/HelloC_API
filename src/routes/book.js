@@ -4,6 +4,7 @@ const router = Router();
 
 router.get('/', book.getBookList)
     .get('/:id', book.getBook)
+    .get('/:id/questions', book.getQuestions)
     .post('/', book.createBook)
     .post('/addRecord', book.addRecord)
     .post('/removeRecord', book.removeRecord)

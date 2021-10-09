@@ -1,10 +1,13 @@
 import {initModels} from "../models/init-models.js";
+import questions from "../models/questions.js";
+import record from "../models/record.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
 
 const Book = models.books;
 const Record = models.record;
+const Questions =models.questions;
 
 exports.getBookList = async (req, res) => {
     Book.findAll()
@@ -30,6 +33,22 @@ exports.getBook = async (req, res) => {
     });
 };
 
+exports.getQuestions = async (req, res) => {
+    Record.findOne({
+        where: { book_id: req.params.id },
+        include: [{
+            model: Questions,
+            as: 'question'
+        }]
+    })
+    .then(result => {
+        return res.send(result.question);
+    })
+    .catch((error) => {
+        console.log("ERROR処理");
+        console.error(error);
+    });
+};
 
 exports.createBook = async (req, res) => {
     Book.create({
