@@ -16,7 +16,10 @@ exports.start = async (req, res) => {
             if (!bcrypt.compareSync(req.body.password, user.password_hash)) {
                 return res.send({ error: "ログインできません" });
             }
-            return res.send({ userId: user.user_id });
+            return res.send({
+                userId: user.user_id,
+                name: user.name
+            });
         })
         .catch((error) => {
             console.log("ERROR処理");

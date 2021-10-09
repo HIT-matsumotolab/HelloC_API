@@ -65,7 +65,7 @@ exports.createUser = async (req, res) => {
     role: req.body.role
   })
     .then(user => {
-      return res.send([user.user_id]);
+      return res.send({ userId: user.user_id });
     })
     .catch((error) => {
       console.log("ERROR処理");
