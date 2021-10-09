@@ -13,6 +13,9 @@ exports.start = async (req, res) => {
         where: { mail: req.body.mail }
     })
         .then(user => {
+            if (user == null) {
+                return res.send({ error: "ログインできません" });
+            }
             if (!bcrypt.compareSync(req.body.password, user.password_hash)) {
                 return res.send({ error: "ログインできません" });
             }
