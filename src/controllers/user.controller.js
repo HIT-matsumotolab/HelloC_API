@@ -1,11 +1,10 @@
-import groups from "../models/groups.js";
 import { initModels } from "../models/init-models.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
 
 const User = models.users;
-const Group = models.groups;
+const Membership = models.membership;
 
 exports.getUserList = async (req, res) => {
   User.findAll({
@@ -39,12 +38,16 @@ exports.getUser = async (req, res) => {
 };
 
 
-exports.getGroup = async (req, res) => {
-  Group.findOne({
+exports.getGroups = async (req, res) => {
+  Membership.findOne({
     where: { user_id: req.params.id },
+    include: [{
+      model: models.groups,
+      as: 'group'
+    }]
   })
-    .then(group => {
-      return res.send(group);
+    .then(result => {
+      return res.send(result.group);
     })
     .catch((error) => {
       console.log("ERROR処理");
