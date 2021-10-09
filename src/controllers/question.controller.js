@@ -1,9 +1,12 @@
-import {initModels} from "../models/init-models.js";
+import { initModels } from "../models/init-models.js";
+import record from "../models/record.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
 
 const Question = models.questions;
+const BlankSelectQuestions = models.blank_select_questions;
+const CodingQuestions = models.coding_questions;
 // const Membership = models.membership;
 // const Collection = models.collection;
 
@@ -31,6 +34,39 @@ exports.getQuestion = async (req, res) => {
         });
 };
 
+exports.getQuestionInfo = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id }
+    })
+        .then(question => {
+            console.log(question.format);
+            if (question.format === "blank_select") {
+                BlankSelectQuestions.findOne({
+                    where: { question_id: req.params.id }
+                }).then(info => {
+                    return res.send(info);
+                }).catch((error) => {
+                    console.log("ERROR処理");
+                    console.error(error);
+                });
+            } else {
+                CodingQuestions.findOne({
+                    where: { question_id: req.params.id }
+                }).then(info => {
+                    return res.send(info);
+                }).catch((error) => {
+                    console.log("ERROR処理");
+                    console.error(error);
+                });
+            }
+            //return res.send(question);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
+
 
 exports.createQuestion = async (req, res) => {
     Question.create({
@@ -48,6 +84,8 @@ exports.createQuestion = async (req, res) => {
             console.error(error);
         });
 };
+
+
 
 
 exports.deleteQuestion = async (req, res) => {
