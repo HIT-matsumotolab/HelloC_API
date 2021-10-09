@@ -102,7 +102,7 @@ POSTGRES_PORT=5432
 POST=4000
 ```
 
-※ すでに作ってあるのでしなくでいい　メモ程度
+※ すでに作ってあるのでしなくていい　メモ程度
 ```
 npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x データベースパスワード -e postgresql -l esm -C
 ```
@@ -121,7 +121,7 @@ http://localhost:4000/status
 
 ユーザーデータがないので表示されないけど
 
-http://localhost:4000/users/
+http://localhost:4000/api/users/
 もいける
 
 認証系はないよ
