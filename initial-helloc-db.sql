@@ -311,9 +311,7 @@ CREATE TABLE IF NOT EXISTS coding_questions(
     max_exec_time   smallint NOT NULL DEFAULT 2,
     model_answer    text NOT NULL,
     judge_format    varchar NOT NULL,
-    stdinout        jsonb NOT NULL,
     mandatory_words varchar,
-    max_exec_time   smallint NOT NULL DEFAULT 2,
     mini_lines      smallint NOT NULL DEFAULT 1,
     CONSTRAINT coding_questions_pkey PRIMARY KEY(question_id),
     CONSTRAINT coding_questions_question_id_fkey FOREIGN KEY(question_id)
