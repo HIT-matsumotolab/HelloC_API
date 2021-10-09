@@ -7,8 +7,6 @@ const models = initModels(sequelize);
 const Question = models.questions;
 const BlankSelectQuestions = models.blank_select_questions;
 const CodingQuestions = models.coding_questions;
-// const Membership = models.membership;
-// const Collection = models.collection;
 
 exports.getQuestionList = async (req, res) => {
     Question.findAll()
@@ -39,7 +37,6 @@ exports.getQuestionInfo = async (req, res) => {
         where: { question_id: req.params.id }
     })
         .then(question => {
-            console.log(question.format);
             if (question.format === "blank_select") {
                 BlankSelectQuestions.findOne({
                     where: { question_id: req.params.id }
@@ -59,7 +56,6 @@ exports.getQuestionInfo = async (req, res) => {
                     console.error(error);
                 });
             }
-            //return res.send(question);
         })
         .catch((error) => {
             console.log("ERROR処理");
