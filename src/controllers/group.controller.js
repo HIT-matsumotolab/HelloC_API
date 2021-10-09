@@ -4,6 +4,7 @@ const sequelize = require("../config/database");
 const models = initModels(sequelize);
 
 const Group = models.groups;
+const Book = models.books;
 const Membership = models.membership;
 const Collection = models.collection;
 
@@ -24,6 +25,24 @@ exports.getGroup = async (req, res) => {
     })
         .then(group => {
             return res.send(group);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
+
+
+exports.getBooks = async (req, res) => {
+    Collection.findOne({
+        where: { group_id: req.params.id },
+        include: [{
+            model: Book,
+            as: 'book'
+        }]
+    })
+        .then(result => {
+            return res.send(result.book);
         })
         .catch((error) => {
             console.log("ERROR処理");

@@ -5,6 +5,7 @@ const router = Router();
 router
     .get('/', group.getGroupList)
     .get('/:id', group.getGroup)
+    .get('/:id/books', group.getBooks)
     .post('/', group.createGroup)
     .post('/addUser', group.addUser)
     .post('/addBook', group.addBook)
