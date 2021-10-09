@@ -4,6 +4,7 @@ const router = Router();
 
 router
     .get('/', user.getUserList)
+    .get('/:id/group',user.getGroup)
     .get('/:id', user.getUser)
     .post('/', user.createUser)
     .delete('/:id', user.deleteUser)
