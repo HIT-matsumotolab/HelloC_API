@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import auth from './auth';
+
 import user from './user';
 import group from './group';
 import book from './book';
@@ -7,6 +9,8 @@ import question from './question';
 import log from './log';
 
 const router = Router();
+
+router.use('/login', auth);
 
 router.use('/users', user);
 router.use('/groups', group);

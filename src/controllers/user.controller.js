@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { initModels } from "../models/init-models.js";
 
 const sequelize = require("../config/database");
@@ -59,11 +61,10 @@ exports.createUser = async (req, res) => {
   User.create({
     name: req.body.name,
     mail: req.body.mail,
-    password_hash: req.body.password,//hash化してね
+    password_hash: bcrypt.hashSync(req.body.password, 10),
     role: req.body.role
   })
     .then(user => {
-      // console.log(user.user_id);
       return res.send([user.user_id]);
     })
     .catch((error) => {
