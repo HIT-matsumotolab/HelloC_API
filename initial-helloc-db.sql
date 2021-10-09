@@ -158,6 +158,7 @@ INSERT INTO question_modes(mode,summary) VALUES ('リアルタイムモード','
 DROP TABLE IF EXISTS questions;
 CREATE TABLE IF NOT EXISTS questions(
     question_id     serial,
+    name            varchar NOT NULL,
     format          varchar  NOT NULL,
     user_id         integer NOT NULL,
     mode            varchar NOT NULL,
@@ -180,6 +181,8 @@ DROP TABLE IF EXISTS record;
 CREATE TABLE IF NOT EXISTS record(
     book_id     integer     NOT NULL,
     question_id integer     NOT NULL,
+    open_time   timestamp,
+    close_time   timestamp,
     created_at  timestamp   NOT NULL NOT NULL default CURRENT_TIMESTAMP,
     UNIQUE (book_id,question_id),
     CONSTRAINT record_book_id_fkey FOREIGN KEY(book_id)
@@ -199,6 +202,7 @@ CREATE TABLE IF NOT EXISTS mirror_questions(
 DROP TABLE IF EXISTS archive_questions;
 CREATE TABLE IF NOT EXISTS archive_questions(
     archive_id          serial,
+    name                varchar NOT NULL,
     mirror_question_id  integer NOT NULL,
     format              varchar  NOT NULL,
     user_id             integer NOT NULL,
@@ -254,15 +258,14 @@ INSERT INTO judge_formats(judge_format,summary) VALUES ('出力変数のみ一�
 DROP TABLE IF EXISTS blank_select_questions;
 CREATE TABLE IF NOT EXISTS blank_select_questions(
     question_id     integer NOT NULL,
-    name            varchar NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
     base_code       text NOT NULL,
+    stdinout        jsonb,
+    max_exec_time   smallint NOT NULL DEFAULT 2,
     select_blank    jsonb NOT NULL,
     correct_blank   jsonb NOT NULL,
-    stdinout        jsonb,
     hint_type       varchar NOT NULL,
-    max_exec_time   smallint NOT NULL DEFAULT 2,
     CONSTRAINT blank_select_questions_pkey PRIMARY KEY(question_id),
     CONSTRAINT blank_select_questions_question_id_fkey FOREIGN KEY(question_id)
         REFERENCES questions(question_id) MATCH SIMPLE
@@ -278,15 +281,14 @@ CREATE TABLE IF NOT EXISTS blank_select_questions(
 DROP TABLE IF EXISTS blank_select_archives;
 CREATE TABLE IF NOT EXISTS blank_select_archives(
     archives_id     integer NOT NULL,
-    name            varchar NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
     base_code       text NOT NULL,
-    select_blank    jsonb NOT NULL,
-    correct_blank   jsonb NOT NULL,
     stdinout        jsonb,
     hint_type       varchar NOT NULL,
     max_exec_time   smallint NOT NULL DEFAULT 2,
+    select_blank    jsonb NOT NULL,
+    correct_blank   jsonb NOT NULL,
     CONSTRAINT blank_select_archives_pkey PRIMARY KEY(archives_id),
     CONSTRAINT blank_select_archives_archives_id_fkey FOREIGN KEY(archives_id)
         REFERENCES mirror_questions(mirror_question_id) MATCH SIMPLE
@@ -302,10 +304,11 @@ CREATE TABLE IF NOT EXISTS blank_select_archives(
 DROP TABLE IF EXISTS coding_questions;
 CREATE TABLE IF NOT EXISTS coding_questions(
     question_id     integer NOT NULL,
-    name            varchar NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
     base_code       text,
+    stdinout        jsonb NOT NULL,
+    max_exec_time   smallint NOT NULL DEFAULT 2,
     model_answer    text NOT NULL,
     judge_format    varchar NOT NULL,
     stdinout        jsonb NOT NULL,
@@ -327,7 +330,6 @@ CREATE TABLE IF NOT EXISTS coding_questions(
 DROP TABLE IF EXISTS coding_archives;
 CREATE TABLE IF NOT EXISTS coding_archives(
     archives_id     integer NOT NULL,
-    name            varchar NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
     base_code       text,
