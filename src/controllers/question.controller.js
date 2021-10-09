@@ -66,6 +66,7 @@ exports.getQuestionInfo = async (req, res) => {
 
 exports.createQuestion = async (req, res) => {
     Question.create({
+        name: req.body.name,
         format: req.body.format,
         user_id: req.body.user_id,
         mode: req.body.mode,
