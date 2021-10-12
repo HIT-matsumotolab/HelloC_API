@@ -7,6 +7,12 @@ router.get('/', question.getQuestionList)
     .get('/:id/info', question.getQuestionInfo)
     .post('/', question.createQuestion)
     .delete('/:id', question.deleteQuestion)
-    .put('/:id', question.updateQuestion);
+    .put('/:id', question.updateQuestion)
+
+    .get('/blankselect/question', question.getBlankSelectQuestionList)
+    .get('/blankselect/question/:id', question.getBlankSelectQuestion)
+    .post('/:id/blank', question.createBlankSelectQuestion)
+    .delete('/:id/blank', question.deleteBlankSelectQuestion)
+    .put('/:id/blank', question.updateBlankSelectQuestion)
 
 export default router;

@@ -1,5 +1,4 @@
 import { initModels } from "../models/init-models.js";
-import record from "../models/record.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
@@ -102,6 +101,7 @@ exports.deleteQuestion = async (req, res) => {
 
 exports.updateQuestion = async (req, res) => {
     Question.update({
+        name: req.body.name,
         format: req.body.format,
         user_id: req.body.user_id,
         mode: req.body.mode,
@@ -119,64 +119,104 @@ exports.updateQuestion = async (req, res) => {
         });
 };
 
-// exports.addUser = async (req, res) => {
-//     Membership.create({
-//         user_id: req.body.user_id,
-//         question_id: req.body.question_id
-//     })
-//         .then(membership => {
-//             return res.send(membership);
-//         })
-//         .catch((error) => {
-//             console.log("ERROR処理");
-//             console.error(error);
-//         });
-// };
+//blank_select_questions
+exports.getBlankSelectQuestionList = async (req, res) => {
+    BlankSelectQuestions.findAll()
+        .then(blankselectquestions => {
+            return res.send(blankselectquestions);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
 
-// exports.removeUser = async (req, res) => {
-//     Membership.findOne({
-//         where: {
-//             user_id: req.body.user_id,
-//             question_id: req.body.question_id
-//         }
-//     })
-//         .then(membership => {
-//             membership.destroy();
-//             return res.send('削除');
-//         })
-//         .catch((error) => {
-//             console.log("ERROR処理");
-//             console.error(error);
-//         });
-// };
+exports.getBlankSelectQuestion = async (req, res) => {
+    BlankSelectQuestions.findOne({
+        where: { question_id: req.params.id }
+    })
+        .then(blankselectquestions => {
+            return res.send(blankselectquestions);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
 
-// exports.addBook = async (req, res) => {
-//     Collection.create({
-//         question_id: req.body.question_id,
-//         book_id: req.body.book_id
-//     })
-//         .then(collection => {
-//             return res.send(collection);
-//         })
-//         .catch((error) => {
-//             console.log("ERROR処理");
-//             console.error(error);
-//         });
-// };
 
-// exports.removeBook = async (req, res) => {
-//     Collection.findOne({
-//         where: {
-//             question_id: req.body.question_id,
-//             book_id: req.body.book_id
-//         }
-//     })
-//         .then(collection => {
-//             collection.destroy();
-//             return res.send('削除');
-//         })
-//         .catch((error) => {
-//             console.log("ERROR処理");
-//             console.error(error);
-//         });
-// };
+exports.createBlankSelectQuestion = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(question => {
+        if( question.format === "blank_select"){
+            return BlankSelectQuestions
+            .create({
+                question_id: question.question_id,
+                explain: req.body.explain,
+                language: req.body.language,
+                base_code: req.body.base_code,
+                select_blank: req.body.select_blank,
+                correct_blank: req.body.correct_blank,
+                stdinout: req.body.stdinout,
+                hint_type: req.body.hint_type,
+                max_exec_time: req.body.max_exec_time
+            })
+            .then(blankselectquestion => {
+                return res.send(blankselectquestion);
+            })
+            .catch((error) => {
+                console.log("ERROR処理");
+                console.log(error);
+            })
+        }
+    })
+};
+
+
+exports.deleteBlankSelectQuestion = async (req, res) => {
+    BlankSelectQuestions.findOne({
+        where: { question_id: req.params.id }
+    })
+        .then(blankselectquestions => {
+            blankselectquestions.destroy();
+            return res.send(blankselectquestions);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
+
+
+exports.updateBlankSelectQuestion = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(question => {
+        if( question.format === "blank_select"){
+            return BlankSelectQuestions
+            .update({
+                question_id: question.question_id,
+                explain: req.body.explain,
+                language: req.body.language,
+                base_code: req.body.base_code,
+                select_blank: req.body.select_blank,
+                correct_blank: req.body.correct_blank,
+                stdinout: req.body.stdinout,
+                hint_type: req.body.hint_type,
+                max_exec_time: req.body.max_exec_time
+            }, {
+                where: { question_id: question.question_id }
+            })
+            .then(result => {
+                return res.send('updated!');
+            })
+            .catch((error) => {
+                console.log("ERROR処理");
+                console.error(error);
+            });
+        }
+    })
+};
