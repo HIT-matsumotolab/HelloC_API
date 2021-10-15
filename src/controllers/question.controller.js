@@ -64,21 +64,44 @@ exports.getQuestionInfo = async (req, res) => {
 
 
 exports.createQuestion = async (req, res) => {
-    Question.create({
-        name: req.body.name,
-        format: req.body.format,
-        user_id: req.body.user_id,
-        mode: req.body.mode,
-        time_limit: req.body.time_limit,
-        number_limit: req.body.number_limit
-    })
-        .then(question => {
-            return res.send(question);
-        })
-        .catch((error) => {
-            console.log("ERROR処理");
-            console.error(error);
+    try {
+        await sequelize.transaction(async (t) => {
+            const question = await Question.create({
+                name: req.body.name,
+                format: req.body.format,
+                user_id: req.body.user_id,
+                mode: req.body.mode,
+                time_limit: req.body.time_limit,
+                number_limit: req.body.number_limit
+            }, { transaction: t })
+
+            if (question.format === "blank_select") {
+                await BlankSelectQuestions.create({
+                    question_id: question.question_id,
+                    explain: req.body.explain,
+                    language: req.body.language,
+                    base_code: req.body.base_code,
+                    stdinout: req.body.stdinout,
+                    max_exec_time: req.body.max_exec_time,
+                    select_blank: req.body.select_blank,
+                    correct_blank: req.body.correct_blank,
+                    hint_type: req.body.hint_type,
+                }, { transaction: t })
+            } else {
+                await CodingQuestions.create({
+                    // 構造未定
+                }, { transaction: t })
+            }
+            return res.send(
+                { "question_id": question.question_id }
+            );
         });
+    }
+    catch (error) {
+        console.log("ERROR処理");
+        console.error(error);
+        return res.send(error);
+    }
 };
 
 
@@ -149,29 +172,29 @@ exports.createBlankSelectQuestion = async (req, res) => {
     Question.findOne({
         where: { question_id: req.params.id }
     })
-    .then(question => {
-        if( question.format === "blank_select"){
-            return BlankSelectQuestions
-            .create({
-                question_id: question.question_id,
-                explain: req.body.explain,
-                language: req.body.language,
-                base_code: req.body.base_code,
-                select_blank: req.body.select_blank,
-                correct_blank: req.body.correct_blank,
-                stdinout: req.body.stdinout,
-                hint_type: req.body.hint_type,
-                max_exec_time: req.body.max_exec_time
-            })
-            .then(blankselectquestion => {
-                return res.send(blankselectquestion);
-            })
-            .catch((error) => {
-                console.log("ERROR処理");
-                console.log(error);
-            })
-        }
-    })
+        .then(question => {
+            if (question.format === "blank_select") {
+                return BlankSelectQuestions
+                    .create({
+                        question_id: question.question_id,
+                        explain: req.body.explain,
+                        language: req.body.language,
+                        base_code: req.body.base_code,
+                        select_blank: req.body.select_blank,
+                        correct_blank: req.body.correct_blank,
+                        stdinout: req.body.stdinout,
+                        hint_type: req.body.hint_type,
+                        max_exec_time: req.body.max_exec_time
+                    })
+                    .then(blankselectquestion => {
+                        return res.send(blankselectquestion);
+                    })
+                    .catch((error) => {
+                        console.log("ERROR処理");
+                        console.log(error);
+                    })
+            }
+        })
 };
 
 
@@ -194,29 +217,29 @@ exports.updateBlankSelectQuestion = async (req, res) => {
     Question.findOne({
         where: { question_id: req.params.id }
     })
-    .then(question => {
-        if( question.format === "blank_select"){
-            return BlankSelectQuestions
-            .update({
-                question_id: question.question_id,
-                explain: req.body.explain,
-                language: req.body.language,
-                base_code: req.body.base_code,
-                select_blank: req.body.select_blank,
-                correct_blank: req.body.correct_blank,
-                stdinout: req.body.stdinout,
-                hint_type: req.body.hint_type,
-                max_exec_time: req.body.max_exec_time
-            }, {
-                where: { question_id: question.question_id }
-            })
-            .then(result => {
-                return res.send('updated!');
-            })
-            .catch((error) => {
-                console.log("ERROR処理");
-                console.error(error);
-            });
-        }
-    })
+        .then(question => {
+            if (question.format === "blank_select") {
+                return BlankSelectQuestions
+                    .update({
+                        question_id: question.question_id,
+                        explain: req.body.explain,
+                        language: req.body.language,
+                        base_code: req.body.base_code,
+                        select_blank: req.body.select_blank,
+                        correct_blank: req.body.correct_blank,
+                        stdinout: req.body.stdinout,
+                        hint_type: req.body.hint_type,
+                        max_exec_time: req.body.max_exec_time
+                    }, {
+                        where: { question_id: question.question_id }
+                    })
+                    .then(result => {
+                        return res.send('updated!');
+                    })
+                    .catch((error) => {
+                        console.log("ERROR処理");
+                        console.error(error);
+                    });
+            }
+        })
 };

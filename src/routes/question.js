@@ -9,10 +9,5 @@ router.get('/', question.getQuestionList)
     .delete('/:id', question.deleteQuestion)
     .put('/:id', question.updateQuestion)
 
-    .get('/blankselect/question', question.getBlankSelectQuestionList)
-    .get('/blankselect/question/:id', question.getBlankSelectQuestion)
-    .post('/:id/blank', question.createBlankSelectQuestion)
-    .delete('/:id/blank', question.deleteBlankSelectQuestion)
-    .put('/:id/blank', question.updateBlankSelectQuestion)
 
 export default router;
