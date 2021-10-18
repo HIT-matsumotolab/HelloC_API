@@ -10,7 +10,7 @@ import log from './log';
 
 const router = Router();
 
-router.use('/login', auth);
+router.use('/auth', auth);
 
 router.use('/users', user);
 router.use('/groups', group);
