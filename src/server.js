@@ -2,11 +2,16 @@ import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
 import routes from './routes';
+import cors from'cors';
 
 //import cors from 'cors';
 
 const app = express();
+const corsOptions = {
+  origin: "http://localhost:8081"
+};
 
+app.use(cors(corsOptions));
 app.use(helmet());
 //app.use(cors);
 app.use(express.json({ limit: '50mb' }));

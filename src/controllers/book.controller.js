@@ -10,8 +10,9 @@ const Record = models.record;
 const Questions =models.questions;
 
 exports.getBookList = async (req, res) => {
-    Book.findAll()
+    Book.findAll({raw: true})
     .then(books => {
+        console.log(books);
         return res.send(books);
     })
     .catch((error) => {
@@ -22,7 +23,8 @@ exports.getBookList = async (req, res) => {
 
 exports.getBook = async (req, res) => {
     Book.findOne({
-        where: { book_id: req.params.id }
+        where: { book_id: req.params.id },
+        raw: true
     })
     .then(book => {
         return res.send(book);
