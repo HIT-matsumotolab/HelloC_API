@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
       const user = await User.create({
         name: req.body.name,
         mail: req.body.mail,
-        password_hash: req.body.password,
+        password_hash: bcrypt.hashSync(req.body.password, 10),
         role: req.body.role
       }, { transaction: t })
       .catch(error => {
