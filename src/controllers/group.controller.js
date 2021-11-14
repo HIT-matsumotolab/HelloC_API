@@ -34,7 +34,7 @@ exports.getGroup = async (req, res) => {
 
 
 exports.getBooks = async (req, res) => {
-    Collection.findOne({
+    Collection.findAll({
         where: { group_id: req.params.id },
         include: [{
             model: Book,
@@ -42,7 +42,7 @@ exports.getBooks = async (req, res) => {
         }]
     })
         .then(result => {
-            return res.send(result.book);
+            return res.send(result);
         })
         .catch((error) => {
             console.log("ERROR処理");
