@@ -20,18 +20,10 @@ module.exports = {
         number_limit: 500
       },
       {
-        name: 'test02',
-        format: 'blank_select',
-        user_id: '1',
-        mode: 'テストモード',
-        time_limit: 1000,
-        number_limit: 500
-      },
-      {
         name: 'test03',
-        format: 'coding',
+        format: 'question_posing',
         user_id: '1',
-        mode: 'テストモード',
+        mode: '演習モード',
         time_limit: 1000,
         number_limit: 500
       },
@@ -39,13 +31,45 @@ module.exports = {
         name: 'test04',
         format: 'blank_select',
         user_id: '1',
-        mode: 'リアルタイムモード',
+        mode: 'テストモード',
         time_limit: 1000,
         number_limit: 500
       },
       {
         name: 'test05',
         format: 'coding',
+        user_id: '1',
+        mode: 'テストモード',
+        time_limit: 1000,
+        number_limit: 500
+      },
+      {
+        name: 'test06',
+        format: 'question_posing',
+        user_id: '1',
+        mode: 'テストモード',
+        time_limit: 1000,
+        number_limit: 500
+      },
+      {
+        name: 'test07',
+        format: 'blank_select',
+        user_id: '1',
+        mode: 'リアルタイムモード',
+        time_limit: 1000,
+        number_limit: 500
+      },
+      {
+        name: 'test08',
+        format: 'coding',
+        user_id: '1',
+        mode: 'リアルタイムモード',
+        time_limit: 1000,
+        number_limit: 500
+      },
+      {
+        name: 'test09',
+        format: 'question_posing',
         user_id: '1',
         mode: 'リアルタイムモード',
         time_limit: 1000,

@@ -6,6 +6,8 @@ const models = initModels(sequelize);
 const Question = models.questions;
 const BlankSelectQuestions = models.blank_select_questions;
 const CodingQuestions = models.coding_questions;
+const QuestionPosing = models.card_question_posing;
+const Card = models.blank_select_question_posing;
 
 exports.getQuestionList = async (req, res) => {
     Question.findAll()
@@ -87,10 +89,24 @@ exports.createQuestion = async (req, res) => {
                     correct_blank: req.body.correct_blank,
                     hint_type: req.body.hint_type,
                 }, { transaction: t })
-            } else {
-                await CodingQuestions.create({
-                    // 構造未定
+            } else if (question.format === "question_posing") {
+                await QuestionPosing.create({
+                    question_id: question.question_id,
+                    explain: req.body.explain,
+                    language: req.body.language,
+                    base_code: req.body.base_code,
+                    stdinout: req.body.stdinout,
+                    max_exec_time: req.body.max_exec_time,
+                    hint_type: req.body.hint_type,
                 }, { transaction: t })
+                .then(card => {
+                    return Card
+                    .create({
+                        question_id: card.question_id,
+                        question_code: req.body.question_code,
+                        card: req.body.card
+                    },  { transaction: t })
+                })
             }
             return res.send(
                 { "question_id": question.question_id }
@@ -167,6 +183,17 @@ exports.getBlankSelectQuestion = async (req, res) => {
         });
 };
 
+exports.getQuestionPosingList = async (req, res) => {
+    QuestionPosing.findAll()
+        .then(questionposing => {
+            return res.send(questionposing);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            console.error(error);
+        });
+};
+
 
 exports.createBlankSelectQuestion = async (req, res) => {
     Question.findOne({
@@ -196,7 +223,57 @@ exports.createBlankSelectQuestion = async (req, res) => {
             }
         })
 };
+//作問による空欄補填学習
+exports.createQuestionPosing = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id },
+        raw: true
+    })
+        .then(question => {
+            if (question.format === "question_posing") {
+                return QuestionPosing
+                    .create({
+                        question_id: question.question_id,
+                        explain: req.body.explain,
+                        language: req.body.language,
+                        base_code: req.body.base_code,
+                        stdinout: req.body.stdinout,
+                        hint_type: req.body.hint_type,
+                        max_exec_time: req.body.max_exec_time
+                    })
+                    .then(questionposing => {
+                        return res.send(questionposing);
+                    })
+                    .catch((error) => {
+                        console.log("ERROR処理");
+                        console.log(error);
+                    })
+            }
+        })
+};
 
+//作問による空欄補填学習の問題登録
+exports.createCard = async (req, res) => {
+    console.log('test');
+    QuestionPosing.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(question => {
+        return Card
+            .create({
+                question_id: req.params.id,
+                question_code: req.body.question_code,
+                card: req.body.card,
+            })
+            .then(card => {
+                return res.send(card);
+            })
+            .catch((error) => {
+                console.log("ERROR処理");
+                console.log(error);
+            })
+    })
+};
 
 exports.deleteBlankSelectQuestion = async (req, res) => {
     BlankSelectQuestions.findOne({
