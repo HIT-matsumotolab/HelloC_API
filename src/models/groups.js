@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class groups extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     group_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -50,6 +50,5 @@ export default class groups extends Model {
       },
     ]
   });
-  return groups;
   }
 }

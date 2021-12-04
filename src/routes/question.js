@@ -10,7 +10,7 @@ router.get('/', question.getQuestionList)
     .post('/', question.createQuestion)
     .post('/:id/blank', question.createBlankSelectQuestion)
     .post('/:id/questionposing', question.createQuestionPosing)
-    .post('/:id/card', question.createCard)
+    // .post('/:id/card', question.createCard)
     .delete('/:id', question.deleteQuestion)
     .put('/:id', question.updateQuestion)
 

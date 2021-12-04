@@ -237,6 +237,8 @@ exports.createQuestionPosing = async (req, res) => {
                         explain: req.body.explain,
                         language: req.body.language,
                         base_code: req.body.base_code,
+                        card: req.body.card,
+                        correct_blank: req.body.correct_blank,
                         stdinout: req.body.stdinout,
                         hint_type: req.body.hint_type,
                         max_exec_time: req.body.max_exec_time
@@ -250,29 +252,6 @@ exports.createQuestionPosing = async (req, res) => {
                     })
             }
         })
-};
-
-//作問による空欄補填学習の問題登録
-exports.createCard = async (req, res) => {
-    console.log('test');
-    QuestionPosing.findOne({
-        where: { question_id: req.params.id }
-    })
-    .then(question => {
-        return Card
-            .create({
-                question_id: req.params.id,
-                question_code: req.body.question_code,
-                card: req.body.card,
-            })
-            .then(card => {
-                return res.send(card);
-            })
-            .catch((error) => {
-                console.log("ERROR処理");
-                console.log(error);
-            })
-    })
 };
 
 exports.deleteBlankSelectQuestion = async (req, res) => {

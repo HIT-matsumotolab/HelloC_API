@@ -3,7 +3,6 @@ const DataTypes = _sequelize.DataTypes;
 import _archive_questions from  "./archive_questions.js";
 import _blank_question_hints from  "./blank_question_hints.js";
 import _blank_select_archives from  "./blank_select_archives.js";
-import _blank_select_question_posing from  "./blank_select_question_posing.js";
 import _blank_select_questions from  "./blank_select_questions.js";
 import _books from  "./books.js";
 import _card_question_hints from  "./card_question_hints.js";
@@ -30,7 +29,6 @@ export const initModels = (sequelize) => {
   const archive_questions = _archive_questions.init(sequelize, DataTypes);
   const blank_question_hints = _blank_question_hints.init(sequelize, DataTypes);
   const blank_select_archives = _blank_select_archives.init(sequelize, DataTypes);
-  const blank_select_question_posing = _blank_select_question_posing.init(sequelize, DataTypes);
   const blank_select_questions = _blank_select_questions.init(sequelize, DataTypes);
   const books = _books.init(sequelize, DataTypes);
   const card_question_hints = _card_question_hints.init(sequelize, DataTypes);
@@ -97,8 +95,6 @@ export const initModels = (sequelize) => {
   question_modes.hasMany(archive_questions, { as: "archive_questions", foreignKey: "mode"});
   questions.belongsTo(question_modes, { as: "mode_question_mode", foreignKey: "mode"});
   question_modes.hasMany(questions, { as: "questions", foreignKey: "mode"});
-  blank_select_question_posing.belongsTo(questions, { as: "question", foreignKey: "question_id"});
-  questions.hasMany(blank_select_question_posing, { as: "blank_select_question_posings", foreignKey: "question_id"});
   blank_select_questions.belongsTo(questions, { as: "question", foreignKey: "question_id"});
   questions.hasOne(blank_select_questions, { as: "blank_select_question", foreignKey: "question_id"});
   card_question_posing.belongsTo(questions, { as: "question", foreignKey: "question_id"});
@@ -128,7 +124,6 @@ export const initModels = (sequelize) => {
     archive_questions,
     blank_question_hints,
     blank_select_archives,
-    blank_select_question_posing,
     blank_select_questions,
     books,
     card_question_hints,

@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class blank_select_questions extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     question_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -69,6 +69,5 @@ export default class blank_select_questions extends Model {
       },
     ]
   });
-  return blank_select_questions;
   }
 }

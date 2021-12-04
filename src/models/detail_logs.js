@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class detail_logs extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     infomation_log_id: {
       autoIncrement: true,
       type: DataTypes.BIGINT,
@@ -50,6 +50,5 @@ export default class detail_logs extends Model {
       },
     ]
   });
-  return detail_logs;
   }
 }

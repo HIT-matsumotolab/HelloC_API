@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class card_question_posing extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     question_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -27,6 +27,14 @@ export default class card_question_posing extends Model {
     },
     base_code: {
       type: DataTypes.TEXT,
+      allowNull: false
+    },
+    card: {
+      type: DataTypes.JSONB,
+      allowNull: false
+    },
+    correct_blank: {
+      type: DataTypes.JSONB,
       allowNull: false
     },
     stdinout: {
@@ -61,6 +69,5 @@ export default class card_question_posing extends Model {
       },
     ]
   });
-  return card_question_posing;
   }
 }

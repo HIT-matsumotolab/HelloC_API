@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class question_modes extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     mode: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,6 +28,5 @@ export default class question_modes extends Model {
       },
     ]
   });
-  return question_modes;
   }
 }

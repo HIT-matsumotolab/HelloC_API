@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class users extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     user_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -58,6 +58,5 @@ export default class users extends Model {
       },
     ]
   });
-  return users;
   }
 }

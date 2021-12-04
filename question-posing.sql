@@ -295,6 +295,8 @@ CREATE TABLE IF NOT EXISTS card_question_posing(
     explain         text NOT NULL,
     language        varchar NOT NULL,
     base_code       text NOT NULL,
+    card            jsonb NOT NULL,
+    correct_blank   jsonb NOT NULL,
     stdinout        jsonb,
     max_exec_time   smallint NOT NULL DEFAULT 2,
     hint_type       varchar NOT NULL,
@@ -307,20 +309,6 @@ CREATE TABLE IF NOT EXISTS card_question_posing(
         ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT card_question_posing_hint_type_fkey FOREIGN KEY(hint_type)
         REFERENCES card_question_hints(hint_type) MATCH SIMPLE
-        ON DELETE NO ACTION ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS blank_select_question_posing;
-CREATE TABLE IF NOT EXISTS blank_select_question_posing(
-    -- card_id         integer NOT NULL,
-    question_id     integer NOT NULL,
-    question_code   text NOT NULL,
-    card            jsonb NOT NULL,
-    -- select_blank    jsonb NOT NULL,
-    -- correct_blank   jsonb NOT NULL,
-    CONSTRAINT blank_select_question_posing_pkey PRIMARY KEY(question_id),
-    CONSTRAINT blank_select_question_posing_question_id_fkey FOREIGN KEY(question_id)
-        REFERENCES card_question_posing(question_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
 

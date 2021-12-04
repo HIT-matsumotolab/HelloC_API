@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class roles extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     role: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,6 +28,5 @@ export default class roles extends Model {
       },
     ]
   });
-  return roles;
   }
 }

@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class coding_archives extends Model {
   static init(sequelize, DataTypes) {
-  super.init({
+  return super.init({
     archives_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -74,6 +74,5 @@ export default class coding_archives extends Model {
       },
     ]
   });
-  return coding_archives;
   }
 }
