@@ -20,6 +20,8 @@ app.get('/status', (req, res) => {
   res.send('HelloCAPI起動中')
 })
 
+app.use(cors()) //これを追加したら繋げられました。
+
 
 app.use('/api', routes);
 
