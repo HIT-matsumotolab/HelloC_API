@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS question_formats(
 
 INSERT INTO question_formats(format,summary) VALUES ('blank_select','空欄補填選択方式。複数ある選択肢の中から問題を選んで解答する');
 INSERT INTO question_formats(format,summary) VALUES ('coding','記述方式。問題文をもとに自らコーディングして解答する');
-INSERT INTO question_formats(format,summary) VALUES ('question_posing','空欄補填の作問方式。ダミーを含む選択肢からカードを選んでコードを完成させる');
+INSERT INTO question_formats(format,summary) VALUES ('card_question','空欄補填の作問方式。ダミーを含む選択肢からカードを選んでコードを完成させる');
 
 DROP TABLE IF EXISTS question_modes;
 CREATE TABLE IF NOT EXISTS question_modes(
@@ -289,8 +289,8 @@ CREATE TABLE IF NOT EXISTS blank_select_questions(
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS card_question_posing;
-CREATE TABLE IF NOT EXISTS card_question_posing(
+DROP TABLE IF EXISTS card_question;
+CREATE TABLE IF NOT EXISTS card_question(
     question_id     integer NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
@@ -300,14 +300,14 @@ CREATE TABLE IF NOT EXISTS card_question_posing(
     stdinout        jsonb,
     max_exec_time   smallint NOT NULL DEFAULT 2,
     hint_type       varchar NOT NULL,
-    CONSTRAINT card_question_posing_pkey PRIMARY KEY(question_id),
-    CONSTRAINT card_question_posing_question_id_fkey FOREIGN KEY(question_id)
+    CONSTRAINT card_question_pkey PRIMARY KEY(question_id),
+    CONSTRAINT card_question_question_id_fkey FOREIGN KEY(question_id)
         REFERENCES questions(question_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT card_question_posing_language_fkey FOREIGN KEY(language)
+    CONSTRAINT card_question_language_fkey FOREIGN KEY(language)
         REFERENCES programing_languages(language) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT card_question_posing_hint_type_fkey FOREIGN KEY(hint_type)
+    CONSTRAINT card_question_hint_type_fkey FOREIGN KEY(hint_type)
         REFERENCES card_question_hints(hint_type) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
