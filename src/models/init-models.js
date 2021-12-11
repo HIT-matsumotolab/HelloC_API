@@ -6,6 +6,7 @@ import _blank_select_archives from  "./blank_select_archives.js";
 import _blank_select_questions from  "./blank_select_questions.js";
 import _books from  "./books.js";
 import _card_question_hints from  "./card_question_hints.js";
+import _card_questions from  "./card_questions.js";
 import _coding_archives from  "./coding_archives.js";
 import _coding_questions from  "./coding_questions.js";
 import _collection from  "./collection.js";
@@ -31,6 +32,7 @@ export const initModels = (sequelize) => {
   const blank_select_questions = _blank_select_questions.init(sequelize, DataTypes);
   const books = _books.init(sequelize, DataTypes);
   const card_question_hints = _card_question_hints.init(sequelize, DataTypes);
+  const card_questions = _card_questions.init(sequelize, DataTypes);
   const coding_archives = _coding_archives.init(sequelize, DataTypes);
   const coding_questions = _coding_questions.init(sequelize, DataTypes);
   const collection = _collection.init(sequelize, DataTypes);
@@ -57,6 +59,8 @@ export const initModels = (sequelize) => {
   books.hasMany(collection, { as: "collections", foreignKey: "book_id"});
   record.belongsTo(books, { as: "book", foreignKey: "book_id"});
   books.hasMany(record, { as: "records", foreignKey: "book_id"});
+  card_questions.belongsTo(card_question_hints, { as: "hint_type_card_question_hint", foreignKey: "hint_type"});
+  card_question_hints.hasMany(card_questions, { as: "card_questions", foreignKey: "hint_type"});
   collection.belongsTo(groups, { as: "group", foreignKey: "group_id"});
   groups.hasMany(collection, { as: "collections", foreignKey: "group_id"});
   membership.belongsTo(groups, { as: "group", foreignKey: "group_id"});
@@ -77,6 +81,8 @@ export const initModels = (sequelize) => {
   programing_languages.hasMany(blank_select_archives, { as: "blank_select_archives", foreignKey: "language"});
   blank_select_questions.belongsTo(programing_languages, { as: "language_programing_language", foreignKey: "language"});
   programing_languages.hasMany(blank_select_questions, { as: "blank_select_questions", foreignKey: "language"});
+  card_questions.belongsTo(programing_languages, { as: "language_programing_language", foreignKey: "language"});
+  programing_languages.hasMany(card_questions, { as: "card_questions", foreignKey: "language"});
   coding_archives.belongsTo(programing_languages, { as: "language_programing_language", foreignKey: "language"});
   programing_languages.hasMany(coding_archives, { as: "coding_archives", foreignKey: "language"});
   coding_questions.belongsTo(programing_languages, { as: "language_programing_language", foreignKey: "language"});
@@ -91,6 +97,8 @@ export const initModels = (sequelize) => {
   question_modes.hasMany(questions, { as: "questions", foreignKey: "mode"});
   blank_select_questions.belongsTo(questions, { as: "question", foreignKey: "question_id"});
   questions.hasOne(blank_select_questions, { as: "blank_select_question", foreignKey: "question_id"});
+  card_questions.belongsTo(questions, { as: "question", foreignKey: "question_id"});
+  questions.hasOne(card_questions, { as: "card_question", foreignKey: "question_id"});
   coding_questions.belongsTo(questions, { as: "question", foreignKey: "question_id"});
   questions.hasOne(coding_questions, { as: "coding_question", foreignKey: "question_id"});
   record.belongsTo(questions, { as: "question", foreignKey: "question_id"});
@@ -119,6 +127,7 @@ export const initModels = (sequelize) => {
     blank_select_questions,
     books,
     card_question_hints,
+    card_questions,
     coding_archives,
     coding_questions,
     collection,
