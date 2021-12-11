@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class membership extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -21,16 +21,22 @@ export default class membership extends Model {
         key: 'group_id'
       },
       unique: "membership_user_id_group_id_key"
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
     tableName: 'membership',
     schema: 'public',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "membership_user_id_group_id_key",
         unique: true,
+        primaryKey: true,
         fields: [
           { name: "user_id" },
           { name: "group_id" },
@@ -38,5 +44,7 @@ export default class membership extends Model {
       },
     ]
   });
+  membership.removeAttribute('id');
+  return membership;
   }
 }

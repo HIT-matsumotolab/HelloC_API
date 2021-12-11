@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class record extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     book_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -29,16 +29,22 @@ export default class record extends Model {
     close_time: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
     tableName: 'record',
     schema: 'public',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "record_book_id_question_id_key",
         unique: true,
+        primaryKey: true,
         fields: [
           { name: "book_id" },
           { name: "question_id" },
@@ -46,5 +52,7 @@ export default class record extends Model {
       },
     ]
   });
-  }
+  record.removeAttribute('id');
+  return record;
+}
 }
