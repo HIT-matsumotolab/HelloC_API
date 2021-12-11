@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class blank_question_hints extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     hint_type: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,5 +28,6 @@ export default class blank_question_hints extends Model {
       },
     ]
   });
+  return blank_question_hints;
   }
 }
