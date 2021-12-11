@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class results extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     result_type: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,5 +28,6 @@ export default class results extends Model {
       },
     ]
   });
+  return results;
   }
 }

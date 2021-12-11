@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class users extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     user_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -30,17 +30,12 @@ export default class users extends Model {
         model: 'roles',
         key: 'role'
       }
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
     tableName: 'users',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "users_mail_key",
@@ -58,5 +53,6 @@ export default class users extends Model {
       },
     ]
   });
+  return users;
   }
 }

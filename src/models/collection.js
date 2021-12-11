@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class collection extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     group_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -36,6 +36,7 @@ export default class collection extends Model {
       {
         name: "collection_group_id_book_id_key",
         unique: true,
+        primaryKey: true,
         fields: [
           { name: "group_id" },
           { name: "book_id" },
@@ -43,5 +44,7 @@ export default class collection extends Model {
       },
     ]
   });
+  collection.removeAttribute('id');
+  return collection;
   }
 }

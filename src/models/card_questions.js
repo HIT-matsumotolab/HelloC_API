@@ -1,9 +1,9 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class card_question_posing extends Model {
+export default class card_questions extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     question_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -56,12 +56,12 @@ export default class card_question_posing extends Model {
     }
   }, {
     sequelize,
-    tableName: 'card_question_posing',
+    tableName: 'card_questions',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "card_question_posing_pkey",
+        name: "card_questions_pkey",
         unique: true,
         fields: [
           { name: "question_id" },
@@ -69,5 +69,6 @@ export default class card_question_posing extends Model {
       },
     ]
   });
+  return card_questions;
   }
 }

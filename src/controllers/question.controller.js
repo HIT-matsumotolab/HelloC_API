@@ -6,8 +6,7 @@ const models = initModels(sequelize);
 const Question = models.questions;
 const BlankSelectQuestions = models.blank_select_questions;
 const CodingQuestions = models.coding_questions;
-const QuestionPosing = models.card_question_posing;
-const Card = models.blank_select_question_posing;
+const CardQuestion = models.card_questions;
 
 exports.getQuestionList = async (req, res) => {
     Question.findAll()
@@ -47,7 +46,7 @@ exports.getQuestionInfo = async (req, res) => {
                     console.log("ERROR処理");
                     console.error(error);
                 });
-            } else {
+            } else if (question.format === "coding") {
                 CodingQuestions.findOne({
                     where: { question_id: req.params.id }
                 }).then(info => {
@@ -56,6 +55,15 @@ exports.getQuestionInfo = async (req, res) => {
                     console.log("ERROR処理");
                     console.error(error);
                 });
+            } else {
+                CardQuestion.findOne({
+                    where: { question_id: req.params.id }
+                }).then(info => {
+                    return res.send(info);
+                }).catch((error) => {
+                    console.log("ERROR処理");
+                    console.error(error);
+                })
             }
         })
         .catch((error) => {
@@ -90,7 +98,7 @@ exports.createQuestion = async (req, res) => {
                     hint_type: req.body.hint_type,
                 }, { transaction: t })
             } else if (question.format === "question_posing") {
-                await QuestionPosing.create({
+                await CardQuestion.create({
                     question_id: question.question_id,
                     explain: req.body.explain,
                     language: req.body.language,
@@ -106,6 +114,10 @@ exports.createQuestion = async (req, res) => {
                         question_code: req.body.question_code,
                         card: req.body.card
                     },  { transaction: t })
+                })
+            } else {
+                await CodingQuestions.create({
+                    // 構造未定
                 })
             }
             return res.send(
@@ -182,17 +194,30 @@ exports.getBlankSelectQuestion = async (req, res) => {
             console.error(error);
         });
 };
-
-exports.getQuestionPosingList = async (req, res) => {
-    QuestionPosing.findAll()
-        .then(questionposing => {
-            return res.send(questionposing);
+//card_question
+exports.getCardQuestionList = async (req, res) => {
+    CardQuestion.findAll()
+        .then(cardquestion => {
+            return res.send(cardquestion);
         })
         .catch((error) => {
             console.log("ERROR処理");
             console.error(error);
         });
 };
+
+exports.getCardQuestion = async (req, res) => {
+    CardQuestion.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(cardquestions => {
+        return res.send(cardquestions);
+    })
+    .catch((error) => {
+        console.log("ERROR処理");
+        console.error(error);
+    })
+}
 
 
 exports.createBlankSelectQuestion = async (req, res) => {
@@ -224,14 +249,14 @@ exports.createBlankSelectQuestion = async (req, res) => {
         })
 };
 //作問による空欄補填学習
-exports.createQuestionPosing = async (req, res) => {
+exports.createCardQuestion = async (req, res) => {
     Question.findOne({
         where: { question_id: req.params.id },
         raw: true
     })
         .then(question => {
             if (question.format === "question_posing") {
-                return QuestionPosing
+                return CardQuestion
                     .create({
                         question_id: question.question_id,
                         explain: req.body.explain,
@@ -243,8 +268,8 @@ exports.createQuestionPosing = async (req, res) => {
                         hint_type: req.body.hint_type,
                         max_exec_time: req.body.max_exec_time
                     })
-                    .then(questionposing => {
-                        return res.send(questionposing);
+                    .then(cardquestion => {
+                        return res.send(cardquestion);
                     })
                     .catch((error) => {
                         console.log("ERROR処理");

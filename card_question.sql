@@ -244,7 +244,7 @@ DROP TABLE IF EXISTS card_question_hints;
 CREATE TABLE IF NOT EXISTS card_question_hints(
     hint_type       varchar NOT NULL,
     summary         varchar NOT NULL,
-    CONSTRAINT card_question_pkey PRIMARY KEY(hint_type)
+    CONSTRAINT card_question_hints_pkey PRIMARY KEY(hint_type)
 );
 
 
@@ -289,8 +289,8 @@ CREATE TABLE IF NOT EXISTS blank_select_questions(
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS card_question;
-CREATE TABLE IF NOT EXISTS card_question(
+DROP TABLE IF EXISTS card_questions;
+CREATE TABLE IF NOT EXISTS card_questions(
     question_id     integer NOT NULL,
     explain         text NOT NULL,
     language        varchar NOT NULL,
@@ -300,14 +300,14 @@ CREATE TABLE IF NOT EXISTS card_question(
     stdinout        jsonb,
     max_exec_time   smallint NOT NULL DEFAULT 2,
     hint_type       varchar NOT NULL,
-    CONSTRAINT card_question_pkey PRIMARY KEY(question_id),
-    CONSTRAINT card_question_question_id_fkey FOREIGN KEY(question_id)
+    CONSTRAINT card_questions_pkey PRIMARY KEY(question_id),
+    CONSTRAINT card_questions_question_id_fkey FOREIGN KEY(question_id)
         REFERENCES questions(question_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT card_question_language_fkey FOREIGN KEY(language)
+    CONSTRAINT card_questions_language_fkey FOREIGN KEY(language)
         REFERENCES programing_languages(language) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    CONSTRAINT card_question_hint_type_fkey FOREIGN KEY(hint_type)
+    CONSTRAINT card_questions_hints_type_fkey FOREIGN KEY(hint_type)
         REFERENCES card_question_hints(hint_type) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE
 );

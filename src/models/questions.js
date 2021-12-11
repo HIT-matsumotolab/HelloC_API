@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class questions extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     question_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -45,17 +45,12 @@ export default class questions extends Model {
     number_limit: {
       type: DataTypes.SMALLINT,
       allowNull: true
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
     tableName: 'questions',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "questions_pkey",
@@ -66,5 +61,6 @@ export default class questions extends Model {
       },
     ]
   });
+  return questions;
   }
 }

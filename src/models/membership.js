@@ -21,17 +21,12 @@ export default class membership extends Model {
         key: 'group_id'
       },
       unique: "membership_user_id_group_id_key"
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
     tableName: 'membership',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "membership_user_id_group_id_key",

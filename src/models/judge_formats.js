@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class judge_formats extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     judge_format: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,5 +28,6 @@ export default class judge_formats extends Model {
       },
     ]
   });
+  return judge_formats;
   }
 }

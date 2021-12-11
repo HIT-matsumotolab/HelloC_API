@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class coding_questions extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     question_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -74,5 +74,6 @@ export default class coding_questions extends Model {
       },
     ]
   });
+  return coding_questions;
   }
 }

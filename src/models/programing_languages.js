@@ -3,7 +3,7 @@ const { Model, Sequelize } = _sequelize;
 
 export default class programing_languages extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
+  super.init({
     language: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,5 +28,6 @@ export default class programing_languages extends Model {
       },
     ]
   });
+  return programing_languages;
   }
 }
