@@ -45,12 +45,17 @@ export default class questions extends Model {
     number_limit: {
       type: DataTypes.SMALLINT,
       allowNull: true
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
   }, {
     sequelize,
     tableName: 'questions',
     schema: 'public',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "questions_pkey",
