@@ -85,41 +85,40 @@ exports.createQuestion = async (req, res) => {
                 number_limit: req.body.number_limit
             }, { transaction: t })
 
-            if (question.format === "blank_select") {
-                await BlankSelectQuestions.create({
-                    question_id: question.question_id,
-                    explain: req.body.explain,
-                    language: req.body.language,
-                    base_code: req.body.base_code,
-                    stdinout: req.body.stdinout,
-                    max_exec_time: req.body.max_exec_time,
-                    select_blank: req.body.select_blank,
-                    correct_blank: req.body.correct_blank,
-                    hint_type: req.body.hint_type,
-                }, { transaction: t })
-            } else if (question.format === "question_posing") {
-                await CardQuestion.create({
-                    question_id: question.question_id,
-                    explain: req.body.explain,
-                    language: req.body.language,
-                    base_code: req.body.base_code,
-                    stdinout: req.body.stdinout,
-                    max_exec_time: req.body.max_exec_time,
-                    hint_type: req.body.hint_type,
-                }, { transaction: t })
-                .then(card => {
-                    return Card
-                    .create({
-                        question_id: card.question_id,
-                        question_code: req.body.question_code,
-                        card: req.body.card
-                    },  { transaction: t })
-                })
-            } else {
-                await CodingQuestions.create({
-                    // 構造未定
-                })
-            }
+            // if (question.format === "blank_select") {
+            //     await BlankSelectQuestions.create({
+            //         question_id: question.question_id,
+            //         explain: req.body.explain,
+            //         language: req.body.language,
+            //         base_code: req.body.base_code,
+            //         stdinout: req.body.stdinout,
+            //         max_exec_time: req.body.max_exec_time,
+            //         select_blank: req.body.select_blank,
+            //         correct_blank: req.body.correct_blank,
+            //         hint_type: req.body.hint_type,
+            //     }, { transaction: t })
+            // } else if (question.format === "card_question") {
+            //     await CardQuestion.create({
+            //         question_id: question.question_id,
+            //         explain: req.body.explain,
+            //         language: req.body.language,
+            //         base_code: req.body.base_code,
+            //         stdinout: req.body.stdinout,
+            //         max_exec_time: req.body.max_exec_time,
+            //         hint_type: req.body.hint_type,
+            //     }, { transaction: t })
+            //     .then(card => {
+            //         return Card
+            //         .create({
+            //             question_id: card.question_id,
+            //             question_code: req.body.question_code,
+            //             card: req.body.card
+            //         },  { transaction: t })
+            //     })
+            // } else {
+            //     await CodingQuestions.create({
+            //     })
+            // }
             return res.send(
                 { "question_id": question.question_id }
             );
@@ -255,7 +254,7 @@ exports.createCardQuestion = async (req, res) => {
         raw: true
     })
         .then(question => {
-            if (question.format === "question_posing") {
+            if (question.format === "card_question") {
                 return CardQuestion
                     .create({
                         question_id: question.question_id,
@@ -292,6 +291,20 @@ exports.deleteBlankSelectQuestion = async (req, res) => {
             console.error(error);
         });
 };
+
+exports.deleteCardQuestion = async (req, res) => {
+    CardQuestion.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(card => {
+        card.destroy();
+        return res.send(card);
+    })
+    .catch((error) => {
+        console.log("ERROR処理");
+        console.log(error);
+    })
+}
 
 
 exports.updateBlankSelectQuestion = async (req, res) => {

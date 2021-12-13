@@ -30,12 +30,17 @@ export default class users extends Model {
         model: 'roles',
         key: 'role'
       }
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
   }, {
     sequelize,
     tableName: 'users',
     schema: 'public',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "users_mail_key",

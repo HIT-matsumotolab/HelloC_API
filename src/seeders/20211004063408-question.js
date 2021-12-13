@@ -21,7 +21,7 @@ module.exports = {
       },
       {
         name: 'test03',
-        format: 'question_posing',
+        format: 'card_question',
         user_id: '1',
         mode: '演習モード',
         time_limit: 1000,
@@ -45,7 +45,7 @@ module.exports = {
       },
       {
         name: 'test06',
-        format: 'question_posing',
+        format: 'card_question',
         user_id: '1',
         mode: 'テストモード',
         time_limit: 1000,
@@ -69,7 +69,7 @@ module.exports = {
       },
       {
         name: 'test09',
-        format: 'question_posing',
+        format: 'card_question',
         user_id: '1',
         mode: 'リアルタイムモード',
         time_limit: 1000,
