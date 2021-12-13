@@ -1,0 +1,855 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: HelloC_Base
+  description: |
+    - HelloC用のREST-APIです
+    - 認証無しでテストしときましょう（怠いので）
+servers:
+  - url: http://localhost:4000/api
+
+# タグ定義
+tags:
+  - name: "users"
+    description: ユーザー情報に関するエンドポイント
+    externalDocs:
+      description: ""
+      url: "basic/users/"
+  - name: "groups"
+    description: グループに関するエンドポイント
+    externalDocs:
+      description: ""
+      url: "basic/groups/"
+  - name: "books"
+    description: 教材に関するエンドポイント
+    externalDocs:
+      description: ""
+      url: "basic/books/"
+  - name: "questions"
+    description: 問題に関するエンドポイント
+    externalDocs:
+      description: ""
+      url: "basic/questions/"
+  - name: "logs"
+    description: ログに関するエンドポイント
+    externalDocs:
+      description: ""
+      url: "basic/logs/"
+paths:
+  /users:
+    get:
+      summary: ユーザー一覧を取得（ページネーションはひとまず置いとく）
+      operationId: listUser
+      tags:
+        - users
+      responses:
+        "200":
+          description: HelloCの登録ユーザーリストを返す
+          headers:
+            x-next:
+              description: 適当
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      user_id: 1,
+                      name: いぐざんぷる君,
+                      mail: example@example.com,
+                      role_id: 1,
+                    },
+                    {
+                      user_id: 2,
+                      name: test君,
+                      mail: test@example.com,
+                      role_id: 2,
+                    },
+                  ]
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: 新規ユーザー作成
+      operationId: createUsers
+      tags:
+        - users
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{userId}:
+    get:
+      summary: 指定されたユーザー情報を取得
+      operationId: showUserById
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 取得したユーザーのIDを指定
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: 指定されたユーザー情報を取得
+      operationId: showUserById
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 取得したユーザーのIDを指定
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ユーザー詳細情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: いぐざんぷる君
+                  mail:
+                    type: string
+                    example: example@example.com
+                  role_id:
+                    type: integer
+                    example: 1
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /questions:
+    get:
+      summary: 問題一覧を取得
+      operationId: getQuestionList
+      tags:
+       - "questions"
+      responses:
+        "200":
+          description: HelloCの問題一覧を返す
+          headers:
+            question_id:
+              description: 問題のid
+              schema:
+                type: integer
+            name:
+              description: 問題名
+              schema:
+                type: string
+            format:
+              description: 形式(coding, blank_select, card_question)
+              schema:
+                type: string
+            user_id:
+              description: 登録するuserのuser_id
+              schema:
+                type: integer
+            mode:
+              description: 形式(演習モード, テストモード, リアルタイムモード)
+              schema:
+                type: string
+            time_limit:
+              description: 適当
+              schema:
+                type: integer
+            number_limit:
+              description: 適当
+              schema:
+                type: integer
+            created_at:
+              description: 作成日
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      "question_id": 1,
+                      "name": "test01",
+                      "format": "blank_select",
+                      "user_id": 1,
+                      "mode": "演習モード",
+                      "time_limit": 1000,
+                      "number_limit": 500,
+                      "created_at": "2021-12-11T23:59:55.223Z"
+                    },
+                    {
+                        "question_id": 5,
+                        "name": "test05",
+                        "format": "coding",
+                        "user_id": 1,
+                        "mode": "テストモード",
+                        "time_limit": 1000,
+                        "number_limit": 500,
+                        "created_at": "2021-12-11T23:59:55.223Z"
+                    },
+                    {
+                        "question_id": 9,
+                        "name": "test09",
+                        "format": "card_question",
+                        "user_id": 1,
+                        "mode": "リアルタイムモード",
+                        "time_limit": 1000,
+                        "number_limit": 500,
+                        "created_at": "2021-12-11T23:59:55.223Z"
+                    }
+                  ]
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      summary: 新規の問題作成
+      operationId: createQuestion
+      tags:
+       - "questions"
+      responses:
+        "201":
+          description: Nu;; response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /questions/{question_id}:
+    get:
+      summary: 指定された問題情報を取得
+      operationId: getQuestion
+      tags:
+        - questions
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: 取得する問題のIDを指定
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  #info
+  /questions/{question_id}/info:
+    get:
+      summary: card_questionの問題取得
+      operationId: getCardQuestionList
+      tags:
+       - questions
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: 取得した問題のIDを指定
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: question_idで指定した問題を取得
+          headers:
+            question_id:
+              description: 問題のid
+              schema:
+                type: integer
+            explain:
+              description: 問題の説明
+              schema:
+                type: string
+            language:
+              description: プログラミング言語
+              schema:
+                type: string
+            base_code:
+              description: 元となる問題のソースコード
+              schema:
+                type: string
+            card:
+              description: base_codeから抜き出す場所情報と選択肢
+              schema:
+                type: array
+            correct_blank:
+              description: 正解となる選択肢
+              schema:
+                type: array
+            stdinout:
+              description: 出力例
+              schema:
+                type: array
+            hint_type:
+              description: 問題のヒントの有無
+              schema:
+                type: string
+            max_exec_time:
+              description: わかんない
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      "quesiton_id": 3,
+                      "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                      "language": "C",
+                      "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                      "card": {
+                          "card1": {
+                              "loc": {
+                                  "line":10,
+                                  "start":7,
+                                  "end":14
+                              },
+                              "option": [
+                                  "i=1;i<=100;i++",
+                                  "i=2;i<100;i++",
+                                  "i=2;i<=100;++i3",
+                                  "i=1;i<100;i++"
+                              ]
+                          },
+                          "card2": {
+                              "loc": {
+                                  "line":12,
+                                  "start":11,
+                                  "end":11
+                              },
+                              "option": [
+                                  "j=1;j<=100;++j",
+                                  "j=2;j<100;++j",
+                                  "j=2;j<=100;++j",
+                                  "i=1;i<100;++i"
+                              ]
+                          },
+                          "card3": {
+                              "loc": {
+                                  "line":13,
+                                  "start":10,
+                                  "end":6
+                              },
+                              "option": [
+                                  "i%j==0",
+                                  "i%j=0",
+                                  "i/j==0",
+                                  "i/j=0"
+                              ]
+                          },
+                          "card4": {
+                              "loc": {
+                                  "line":19,
+                                  "start":8,
+                                  "end":6
+                              },
+                              "option": [
+                                  "break;",
+                                  "continue;",
+                                  "goto END;",
+                                  "end;"
+                              ]
+                          }
+                      },
+                      "correct_blank": {
+                          "card1": "i=2;i<=100;i++",
+                          "card2": "j=2;j<i;j++",
+                          "card3": "i%j==0",
+                          "card4": "break"
+                      },
+                      "stdinout": {
+                        "example1":{
+                            "in":"",
+                            "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                        }
+                      },
+                      "hint_type": "なし",
+                      "max_exec_time": "3"
+                  }
+                  ]
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  #card_question
+  #parameterは今度書きます
+
+  /questions/card/list:
+    get:
+      summary: idで指定した問題取得
+      operationId: getCardQuestionInfo
+      tags:
+       - questions
+      responses:
+        "200":
+          description: card_questionの問題を取得
+          headers:
+            question_id:
+              description: 問題のid
+              schema:
+                type: integer
+            explain:
+              description: 問題の説明
+              schema:
+                type: string
+            language:
+              description: プログラミング言語
+              schema:
+                type: string
+            base_code:
+              description: 元となる問題のソースコード
+              schema:
+                type: string
+            card:
+              description: base_codeから抜き出す場所情報と選択肢
+              schema:
+                type: array
+            correct_blank:
+              description: 正解となる選択肢
+              schema:
+                type: array
+            stdinout:
+              description: 出力例
+              schema:
+                type: array
+            hint_type:
+              description: 問題のヒントの有無
+              schema:
+                type: string
+            max_exec_time:
+              description: わかんない
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      "quesiton_id": 3,
+                      "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                      "language": "C",
+                      "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                      "card": {
+                          "card1": {
+                              "loc": {
+                                  "line":10,
+                                  "start":7,
+                                  "end":14
+                              },
+                              "option": [
+                                  "i=1;i<=100;i++",
+                                  "i=2;i<100;i++",
+                                  "i=2;i<=100;++i3",
+                                  "i=1;i<100;i++"
+                              ]
+                          },
+                          "card2": {
+                              "loc": {
+                                  "line":12,
+                                  "start":11,
+                                  "end":11
+                              },
+                              "option": [
+                                  "j=1;j<=100;++j",
+                                  "j=2;j<100;++j",
+                                  "j=2;j<=100;++j",
+                                  "i=1;i<100;++i"
+                              ]
+                          },
+                          "card3": {
+                              "loc": {
+                                  "line":13,
+                                  "start":10,
+                                  "end":6
+                              },
+                              "option": [
+                                  "i%j==0",
+                                  "i%j=0",
+                                  "i/j==0",
+                                  "i/j=0"
+                              ]
+                          },
+                          "card4": {
+                              "loc": {
+                                  "line":19,
+                                  "start":8,
+                                  "end":6
+                              },
+                              "option": [
+                                  "break;",
+                                  "continue;",
+                                  "goto END;",
+                                  "end;"
+                              ]
+                          }
+                      },
+                      "correct_blank": {
+                          "card1": "i=2;i<=100;i++",
+                          "card2": "j=2;j<i;j++",
+                          "card3": "i%j==0",
+                          "card4": "break"
+                      },
+                      "stdinout": {
+                        "example1":{
+                            "in":"",
+                            "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                        }
+                      },
+                      "hint_type": "なし",
+                      "max_exec_time": "3"
+                  }
+                  ]
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /questions/{question_id}/card:
+    get:
+      summary: card_questionの指定した問題情報を取得
+      operationId: getCardQuestionList
+      tags:
+       - questions
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: 取得した問題のIDを指定
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: card_questionの指定した問題を取得
+          headers:
+            question_id:
+              description: 問題のid
+              schema:
+                type: integer
+            explain:
+              description: 問題の説明
+              schema:
+                type: string
+            language:
+              description: プログラミング言語
+              schema:
+                type: string
+            base_code:
+              description: 元となる問題のソースコード
+              schema:
+                type: string
+            card:
+              description: base_codeから抜き出す場所情報と選択肢
+              schema:
+                type: array
+            correct_blank:
+              description: 正解となる選択肢
+              schema:
+                type: array
+            stdinout:
+              description: 出力例
+              schema:
+                type: array
+            hint_type:
+              description: 問題のヒントの有無
+              schema:
+                type: string
+            max_exec_time:
+              description: わかんない
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      "quesiton_id": 3,
+                      "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                      "language": "C",
+                      "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                      "card": {
+                          "card1": {
+                              "loc": {
+                                  "line":10,
+                                  "start":7,
+                                  "end":14
+                              },
+                              "option": [
+                                  "i=1;i<=100;i++",
+                                  "i=2;i<100;i++",
+                                  "i=2;i<=100;++i3",
+                                  "i=1;i<100;i++"
+                              ]
+                          },
+                          "card2": {
+                              "loc": {
+                                  "line":12,
+                                  "start":11,
+                                  "end":11
+                              },
+                              "option": [
+                                  "j=1;j<=100;++j",
+                                  "j=2;j<100;++j",
+                                  "j=2;j<=100;++j",
+                                  "i=1;i<100;++i"
+                              ]
+                          },
+                          "card3": {
+                              "loc": {
+                                  "line":13,
+                                  "start":10,
+                                  "end":6
+                              },
+                              "option": [
+                                  "i%j==0",
+                                  "i%j=0",
+                                  "i/j==0",
+                                  "i/j=0"
+                              ]
+                          },
+                          "card4": {
+                              "loc": {
+                                  "line":19,
+                                  "start":8,
+                                  "end":6
+                              },
+                              "option": [
+                                  "break;",
+                                  "continue;",
+                                  "goto END;",
+                                  "end;"
+                              ]
+                            }
+                        },
+                        "correct_blank": {
+                            "card1": "i=2;i<=100;i++",
+                            "card2": "j=2;j<i;j++",
+                            "card3": "i%j==0",
+                            "card4": "break"
+                        },
+                        "stdinout": {
+                          "example1":{
+                              "in":"",
+                              "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                          }
+                        },
+                        "hint_type": "なし",
+                        "max_exec_time": "3"
+                    }
+                  ]
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      summary:  新規の空欄補填による作問問題の作成
+      operationId: createCardQuestion
+      tags:
+       - questions
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: 取得した問題のIDを指定
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: 指定したquestion_idの問題のformatがcard_questionの場合に, 新規の問題を作成
+          headers:
+            question_id:
+              description: 問題のid
+              schema:
+                type: integer
+            explain:
+              description: 問題の説明
+              schema:
+                type: string
+            language:
+              description: プログラミング言語
+              schema:
+                type: string
+            base_code:
+              description: 元となる問題のソースコード
+              schema:
+                type: string
+            card:
+              description: base_codeから抜き出す場所情報と選択肢
+              schema:
+                type: array
+            correct_blank:
+              description: 正解となる選択肢
+              schema:
+                type: array
+            stdinout:
+              description: 出力例
+              schema:
+                type: array
+            hint_type:
+              description: 問題のヒントの有無
+              schema:
+                type: string
+            max_exec_time:
+              description: わかんない
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                  [
+                    {
+                      "quesiton_id": 3,
+                      "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                      "language": "C",
+                      "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                      "card": {
+                          "card1": {
+                              "loc": {
+                                  "line":10,
+                                  "start":7,
+                                  "end":14
+                              },
+                              "option": [
+                                  "i=1;i<=100;i++",
+                                  "i=2;i<100;i++",
+                                  "i=2;i<=100;++i3",
+                                  "i=1;i<100;i++"
+                              ]
+                          },
+                          "card2": {
+                              "loc": {
+                                  "line":12,
+                                  "start":11,
+                                  "end":11
+                              },
+                              "option": [
+                                  "j=1;j<=100;++j",
+                                  "j=2;j<100;++j",
+                                  "j=2;j<=100;++j",
+                                  "i=1;i<100;++i"
+                              ]
+                          },
+                          "card3": {
+                              "loc": {
+                                  "line":13,
+                                  "start":10,
+                                  "end":6
+                              },
+                              "option": [
+                                  "i%j==0",
+                                  "i%j=0",
+                                  "i/j==0",
+                                  "i/j=0"
+                              ]
+                          },
+                          "card4": {
+                              "loc": {
+                                  "line":19,
+                                  "start":8,
+                                  "end":6
+                              },
+                              "option": [
+                                  "break;",
+                                  "continue;",
+                                  "goto END;",
+                                  "end;"
+                              ]
+                          }
+                      },
+                      "correct_blank": {
+                          "card1": "i=2;i<=100;i++",
+                          "card2": "j=2;j<i;j++",
+                          "card3": "i%j==0",
+                          "card4": "break"
+                      },
+                      "stdinout": {
+                        "example1":{
+                            "in":"",
+                            "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                        }
+                      },
+                      "hint_type": "なし",
+                      "max_exec_time": "3"
+                  }
+                ]
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          example: "エラー"
