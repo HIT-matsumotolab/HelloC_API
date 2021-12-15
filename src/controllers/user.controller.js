@@ -41,7 +41,7 @@ exports.getUser = async (req, res) => {
 
 
 exports.getGroups = async (req, res) => {
-  Membership.findOne({
+  Membership.findAll({
     where: { user_id: req.params.id },
     include: [{
       model: models.groups,
@@ -49,7 +49,7 @@ exports.getGroups = async (req, res) => {
     }]
   })
     .then(result => {
-      return res.send(result.group);
+      return res.send(result);
     })
     .catch((error) => {
       console.log("ERROR処理");
