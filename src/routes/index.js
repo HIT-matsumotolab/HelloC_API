@@ -16,6 +16,6 @@ router.use('/users', user);
 router.use('/groups', group);
 router.use('/books', book);
 router.use('/questions', question);
-// router.use('/log', log);
+router.use('/logs', log);
 
 export default router;
