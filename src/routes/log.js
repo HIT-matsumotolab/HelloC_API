@@ -11,6 +11,7 @@ router
     .put('/:id', log.updateLogInfo)
 
     //detail_logs
+    .get('/detail/list', log.getDetailLogInfoList)
     .post('/:id/detail', log.createDetailLog)
     .delete('/detail/:id', log.deleteDetailLog)
     .put('/detail/:id', log.updateDetailLog)

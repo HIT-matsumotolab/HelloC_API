@@ -119,12 +119,13 @@ INSERT INTO results(result_type,summary) VALUES ('模範解答不一致','実行
 
 DROP TABLE IF EXISTS detail_logs;
 CREATE TABLE IF NOT EXISTS detail_logs(
-    infomation_log_id   bigserial,
+    infomation_log_id   bigint,
+    detail_log_id       bigserial,
     turn                smallint    NOT NULL,
     result_type         varchar     NOT NULL,
     answer              jsonb       NOT NULL,
     answer_at           timestamp   NOT NULL default CURRENT_TIMESTAMP,
-    CONSTRAINT detail_logs_pkey PRIMARY KEY(infomation_log_id),
+    CONSTRAINT detail_logs_pkey PRIMARY KEY(detail_log_id),
     CONSTRAINT detail_logs_infomation_log_id_fkey FOREIGN KEY(infomation_log_id)
         REFERENCES infomation_logs(infomation_log_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
