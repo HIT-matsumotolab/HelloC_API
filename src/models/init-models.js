@@ -66,7 +66,7 @@ export const initModels = (sequelize) => {
   membership.belongsTo(groups, { as: "group", foreignKey: "group_id"});
   groups.hasMany(membership, { as: "memberships", foreignKey: "group_id"});
   detail_logs.belongsTo(infomation_logs, { as: "infomation_log", foreignKey: "infomation_log_id"});
-  infomation_logs.hasOne(detail_logs, { as: "detail_log", foreignKey: "infomation_log_id"});
+  infomation_logs.hasMany(detail_logs, { as: "detail_log", foreignKey: "infomation_log_id"});
   coding_archives.belongsTo(judge_formats, { as: "judge_format_judge_format", foreignKey: "judge_format"});
   judge_formats.hasMany(coding_archives, { as: "coding_archives", foreignKey: "judge_format"});
   coding_questions.belongsTo(judge_formats, { as: "judge_format_judge_format", foreignKey: "judge_format"});

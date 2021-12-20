@@ -5,14 +5,18 @@ export default class detail_logs extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     infomation_log_id: {
-      autoIncrement: true,
       type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true,
+      allowNull: true,
       references: {
         model: 'infomation_logs',
         key: 'infomation_log_id'
       }
+    },
+    detail_log_id: {
+      autoIncrement: true,
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      primaryKey: true
     },
     turn: {
       type: DataTypes.SMALLINT,
@@ -45,7 +49,7 @@ export default class detail_logs extends Model {
         name: "detail_logs_pkey",
         unique: true,
         fields: [
-          { name: "infomation_log_id" },
+          { name: "detail_log_id" },
         ]
       },
     ]
