@@ -12,12 +12,14 @@ const Questions =models.questions;
 exports.getBookList = async (req, res) => {
     Book.findAll({raw: true})
     .then(books => {
-        console.log(books);
+        if(books[0] === undefined){
+            return res.status(404).send('Not found');
+        }
         return res.send(books);
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -27,16 +29,19 @@ exports.getBook = async (req, res) => {
         raw: true
     })
     .then(book => {
+        if(book === null){
+            return res.status(404).send('Not Found');
+        }
         return res.send(book);
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
 exports.getQuestions = async (req, res) => {
-    Record.findOne({
+    Record.findAll({
         where: { book_id: req.params.id },
         include: [{
             model: Questions,
@@ -44,11 +49,14 @@ exports.getQuestions = async (req, res) => {
         }]
     })
     .then(result => {
-        return res.send(result.question);
+        if(result[0] === undefined){
+            return res.status(404).send('Not Found');
+        }
+        return res.send(result);
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -60,11 +68,11 @@ exports.createBook = async (req, res) => {
         user_id: req.body.user_id
     })
     .then(book => {
-        return res.send(book);
+        return res.status(201).send(book);
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -74,12 +82,15 @@ exports.deleteBook = async (req, res) => {
         where: { book_id: req.params.id }
     })
     .then(book => {
+        if(book === null){
+            return res.status(404).send('Not Found');
+        }
         book.destroy();
-        return res.send(book);
+        return res.send('deleted!');
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -93,11 +104,14 @@ exports.updateBook = async (req, res) => {
         where: { book_id: req.params.id }
     })
     .then(book => {
-        return res.send(book);
+        if(book[0] === 0){
+            return res.status(404).send('Not Found');
+        }
+        return res.send('updated!');
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -107,11 +121,11 @@ exports.addRecord = async (req, res) => {
         question_id: req.body.question_id,
     })
     .then(record => {
-        return res.send(record);
+        return res.status(201).send(record);
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };
 
@@ -123,11 +137,14 @@ exports.removeRecord = async (req, res) => {
         }
     })
     .then(record => {
+        if(record === null){
+            return res.status(404).send('Not Found');
+        }
         record.destroy();
-        return res.send('削除');
+        return res.send('deleted!');
     })
     .catch((error) => {
         console.log("ERROR処理");
-        console.error(error);
+        return res.status(400).send(error);
     });
 };

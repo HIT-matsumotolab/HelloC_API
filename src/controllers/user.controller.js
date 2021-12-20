@@ -15,11 +15,14 @@ exports.getUserList = async (req, res) => {
     }
   })
     .then(users => {
+      if(users[0] === undefined){
+        return res.status(404).send('Not Found');
+      }
       return res.send(users);
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -31,11 +34,15 @@ exports.getUser = async (req, res) => {
     }
   })
     .then(user => {
+      if(user === null){
+        return res.status(404).send('Not Found')
+      }
+      // console.log(user);
       return res.send(user);
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -43,17 +50,21 @@ exports.getUser = async (req, res) => {
 exports.getGroups = async (req, res) => {
   Membership.findAll({
     where: { user_id: req.params.id },
+    raw: true,
     include: [{
       model: models.groups,
       as: 'group'
     }]
   })
     .then(result => {
+      if(result[0] === undefined){
+        return res.status(404).send('Not found');
+      }
       return res.send(result);
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -65,11 +76,11 @@ exports.createUser = async (req, res) => {
     role: req.body.role
   })
     .then(user => {
-      return res.send({ userId: user.user_id });
+      return res.status(201).send({ userId: user.user_id });
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -83,11 +94,11 @@ exports.deleteUser = async (req, res) => {
       where: { user_id: req.params.id }
     })
     .then(user => {
-      return res.send(user);
+      return res.status(200).send('deleted!');
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -104,11 +115,11 @@ exports.updateUser = async (req, res) => {
       where: { user_id: req.params.id }
     })
     .then(user => {
-      return res.send('updated!');
+      return res.status(200).send('updated!');
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 

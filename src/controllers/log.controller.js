@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import req from "express/lib/request";
-import detail_logs from "../models/detail_logs.js";
+// import req from "express/lib/request";
+// import detail_logs from "../models/detail_logs.js";
 
 import { initModels } from "../models/init-models.js";
-import results from "../models/results.js";
+// import results from "../models/results.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
@@ -15,11 +15,14 @@ const Result = models.results;
 exports.getLogInfoList = async (req, res) => {
   LogInfo.findAll()
     .then(logs => {
+      if(logs[0] === undefined){
+        return res.status(404).send('Not Found');
+      }
       return res.send(logs);
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -30,10 +33,6 @@ exports.getLogInfo = async (req, res) => {
         {
             model: Detail_log,
             as: 'detail_log'
-        },
-        {
-            model: Result,
-            as: 'result'
         }
     ]
   })
@@ -42,7 +41,7 @@ exports.getLogInfo = async (req, res) => {
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -55,26 +54,29 @@ exports.createLogInfo = async (req, res) => {
     elapsed_time: req.body.elapsed_time
   })
     .then(log => {
-      return res.send({log});
+      return res.status(201).send({log});
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
 
 exports.deleteLogInfo = async (req, res) => {
-  LogInfo.findOne({
+  LogInfo.destroy({
       where: { infomation_log_id: req.params.id }
     })
     .then(log => {
-      log.destroy();
-      return res.send(log)
+      if(log === 1){
+        return res.status(200).send('deleted!');
+      } else {
+          return res.status(404).send('Not Found');
+      }
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
 
@@ -92,13 +94,27 @@ exports.updateLogInfo = async (req, res) => {
         where: { infomation_log_id: req.params.id }
     })
     .then(log => {
-      return res.send(log);
+      if(log[0] === 0){
+        return res.status(404).send('Not Found');
+    }
+    return res.send('updated!');
     })
     .catch((error) => {
       console.log("ERROR処理");
-      console.error(error);
+      return res.status(400).send(error);
     });
 };
+
+exports.getDetailLogInfoList = async (req, res) => {
+  Detail_log.findAll()
+  .then(logs => {
+    return res.send(logs);
+  })
+  .catch((error) => {
+    console.log('ERROR処理');
+    return res.status(400).send(error);
+  })
+}
 
 exports.createDetailLog = async (req, res) => {
     LogInfo.findOne({
@@ -106,7 +122,7 @@ exports.createDetailLog = async (req, res) => {
     })
     .then(loginfo => {
         return Detail_log.create({
-            infomation_log_id: req.body.infomation_log_id,
+            infomation_log_id: loginfo.infomation_log_id,
             turn: req.body.turn,
             result_type: req.body.result_type,
             answer: req.body.answer
@@ -116,7 +132,7 @@ exports.createDetailLog = async (req, res) => {
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
     })
 };

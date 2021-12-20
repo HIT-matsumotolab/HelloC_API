@@ -7,7 +7,7 @@ router.get('/', book.getBookList)
     .get('/:id/questions', book.getQuestions)
     .post('/', book.createBook)
     .post('/addRecord', book.addRecord)
-    .post('/removeRecord', book.removeRecord)
+    .delete('/removeRecord', book.removeRecord)
     .delete('/:id', book.deleteBook) 
     .put('/:id', book.updateBook);
 

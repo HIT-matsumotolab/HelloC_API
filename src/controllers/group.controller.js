@@ -1,3 +1,4 @@
+import { raw } from "express";
 import { initModels } from "../models/init-models.js";
 
 const sequelize = require("../config/database");
@@ -11,24 +12,31 @@ const Collection = models.collection;
 exports.getGroupList = async (req, res) => {
     Group.findAll()
         .then(groups => {
+            if(groups[0] === undefined){
+                return res.status(404).send('Not found');
+            }
             return res.send(groups);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
 exports.getGroup = async (req, res) => {
     Group.findOne({
-        where: { group_id: req.params.id }
+        where: { group_id: req.params.id },
+        raw: true
     })
         .then(group => {
-            return res.send(group);
+            if(group === null){
+                return res.status(404).send('Group not found');
+            }
+            return res.status(200).send(group);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -36,17 +44,21 @@ exports.getGroup = async (req, res) => {
 exports.getBooks = async (req, res) => {
     Collection.findAll({
         where: { group_id: req.params.id },
+        raw: true,
         include: [{
             model: Book,
             as: 'book'
         }]
     })
         .then(result => {
+            if(result[0] === undefined){
+                return res.status(404).send('Not found');
+            }
             return res.send(result);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -59,11 +71,11 @@ exports.createGroup = async (req, res) => {
         user_id: req.body.user_id
     })
         .then(group => {
-            return res.send(group);
+            return res.status(201).send(group);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -73,32 +85,47 @@ exports.deleteGroup = async (req, res) => {
         where: { group_id: req.params.id }
     })
         .then(group => {
+            if(group === null){
+                return res.status(404).send('Group not found');
+            }
             group.destroy();
-            return res.send(group);
+            return res.send('deleted!');
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
 
 exports.updateGroup = async (req, res) => {
-    Group.update({
-        name: req.body.name,
-        summary: req.body.summary,
-        access_key: req.body.access_key,
-        user_id: req.body.user_id
-    }, {
-        where: { group_id: req.params.id }
-    })
-        .then(group => {
-            return res.send(group);
+    try {
+        await sequelize.transaction(async (t) => {
+            const group = await Group.update({
+                name: req.body.name,
+                summary: req.body.summary,
+                access_key: req.body.access_key,
+                user_id: req.body.user_id
+            }, {
+                where: { group_id: req.params.id }
+            }, { transaction: t })
+            .then(group => {
+                if(group === null){
+                    res.status(404).send('Group not found');
+                }
+                return res.send('updated!');
+            })
+            .catch((error) => {
+                console.log("ERROR処理");
+                return res.status(400).send(error);
+            })
         })
-        .catch((error) => {
+    }
+    catch (error) {
             console.log("ERROR処理");
-            console.error(error);
-        });
+            console.log(error);
+            return res.status(400).send(error);
+        }
 };
 
 exports.addUser = async (req, res) => {
@@ -107,11 +134,11 @@ exports.addUser = async (req, res) => {
         group_id: req.body.group_id
     })
         .then(membership => {
-            return res.send(membership);
+            return res.status(201).send(membership);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -123,12 +150,15 @@ exports.removeUser = async (req, res) => {
         }
     })
         .then(membership => {
+            if(membership === null){
+                return res.status(404).send('Not Found');
+            }
             membership.destroy();
-            return res.send('削除');
+            return res.status(200).send('deleted!');
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -138,11 +168,11 @@ exports.addBook = async (req, res) => {
         book_id: req.body.book_id
     })
         .then(collection => {
-            return res.send(collection);
+            return res.status(201).send(collection);
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
 
@@ -154,11 +184,14 @@ exports.removeBook = async (req, res) => {
         }
     })
         .then(collection => {
+            if(collection === null){
+                return res.status(404).send('Not Found');
+            }
             collection.destroy();
-            return res.send('削除');
+            return res.send('deleted!');
         })
         .catch((error) => {
             console.log("ERROR処理");
-            console.error(error);
+            return res.status(400).send(error);
         });
 };
