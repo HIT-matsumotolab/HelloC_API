@@ -1,0 +1,1968 @@
+openapi: '3.0.0'
+info:
+  title: HelloC_Base
+  description: "HelloC用のREST-API"
+  version: '1.0'
+servers:
+  - url: http://localhost:4000/api
+  - url: http://150.19.10.198:4000/api
+
+# タグ
+tags:
+  - name: users
+    description: ユーザー情報
+    externalDocs:
+      url: basic/users/
+  
+  - name: groups
+    description: グループ情報
+    externalDocs:
+      url: basic/groups/
+  
+  - name: books
+    description: 教材情報
+    externalDocs:
+      url: basic/books/
+
+  - name: questions
+    description: 問題情報
+    externalDocs:
+      url: basic/questions/
+
+  - name: logs
+    description: ログ情報
+    externalDocs:
+      url: basic/logs/
+
+
+paths:
+  #ユーザー情報
+  /users:
+    get:
+      tags:
+        - "users"
+      summary: ユーザーのリストを取得
+      operationId: getUserList
+      parameters: []
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    
+    post:
+      tags:
+        - users
+      summary: ユーザーを作成
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                mail:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - 学習者
+                    - 教授者
+                    - 問題終了者
+                    - 問題作成者
+              required:
+                - name
+                - mail
+                - password
+                - role
+      responses:
+        '201':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad Request
+  
+  /users/{userID}:
+    get:
+      tags:
+        - "users"
+      summary: 指定したユーザーを取得
+      operationId: getUser
+      parameters:
+      - name: userID
+        in: path
+        description: 取得するユーザのidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+    delete:
+      tags:
+        - "users"
+      summary: 指定したユーザーを削除
+      operationId: deleteUser
+      parameters:
+      - name: userID
+        in: path
+        description: 削除するユーザのidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: "successful operation"
+        '400':
+          description: Bad Request
+
+    put:
+      tags:
+      - "users"
+      summary: 指定したユーザーの更新
+      operationId: updateUser
+      parameters:
+      - name: userID
+        in: path
+        description: 更新するユーザのidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                mail:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - 学習者
+                    - 教授者
+                    - 問題終了者
+                    - 問題作成者
+              required:
+                - name
+                - mail
+                - password
+                - role
+      responses:
+        '200':
+          description: "successful operation"
+        '400':
+          description: Bad Request
+
+  /users/{userID}/groups:
+    get:
+      tags:
+        - "users"
+      summary: ユーザーの所属グループを表示
+      operationId: getGroups
+      parameters:
+      - name: userID
+        in: path
+        description: 表示するユーザのidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Membership"
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+  #グループ情報
+  /groups:
+    get:
+      tags:
+        - groups
+      summary: グループのリストを表示
+      operationId: getGroupList
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    post:
+      tags:
+        - groups
+      summary: グループを作成
+      operationId: createGroup
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                summary:
+                  type: string
+                access_key:
+                  type: string
+                  description: 任意のアクセスキーを設定
+                user_id:
+                  type: integer
+                  format: int32
+              required:
+                - name
+                - user_id
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: invalid status value
+
+  /groups/{groupID}:
+    get:
+      tags:
+        - groups
+      summary: 指定したグループを表示
+      operationId: getGroup
+      parameters:
+      - name: groupID
+        in: path
+        description: 指定するグループのidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: Bad Request
+        '404':
+          description: Group not found
+
+    delete:
+      tags:
+        - groups
+      summary: 削除するグループのidを指定
+      operationId: deleteGroup
+      parameters:
+        - name: groupID
+          in: path
+          description: 削除するグループのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Group not found
+
+    put:
+      tags:
+        - groups
+      summary: 更新するグループのidを指定
+      operationId: updateGroup
+      parameters:
+        - name: groupID
+          in: path
+          description: 更新するグループのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                summary:
+                  type: string
+                access_key:
+                  type: string
+                  description: 任意のアクセスキーを設定
+                user_id:
+                  type: integer
+                  format: int32
+              required:
+                - name
+                - user_id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /groups/{groupID}/books:
+    get:
+      tags:
+        - groups
+      summary: グループの保持教材を取得
+      operationId: getBooks
+      parameters:
+        - name: groupID
+          in: path
+          description: 表示するグループのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+  
+  /groups/addUser:
+    post:
+      tags:
+          - groups
+      summary: グループにユーザーを登録
+      operationId: addUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  format: int32
+                group_id:
+                  type: integer
+                  format: int32
+              required:
+                - user_id
+                - group_id
+      responses:
+        '201':
+          description: successful operation
+        '400':
+          description: Bad Request
+
+  /groups/removeUser:
+    delete:
+      tags:
+          - groups
+      summary: グループのユーザーを削除
+      operationId: removeUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  format: int32
+                group_id:
+                  type: integer
+                  format: int32
+              required:
+                - user_id
+                - group_id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+  
+  /groups/addBook:
+    post:
+      tags:
+        - groups
+      summary: グループに教材を登録
+      operationId: addBook
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                  format: int32
+                book_id:
+                  type: integer
+                  format: int32
+              required:
+                - group_id
+                - book_id
+      responses:
+        '201':
+          description: successful operation
+        '400':
+          description: Bad Request
+  
+  /groups/removeBook:
+    delete:
+      tags:
+          - groups
+      summary: グループの教材を削除
+      operationId: removeBook
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                  format: int32
+                book_id:
+                  type: integer
+                  format: int32
+              required:
+                - group_id
+                - book_id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+  
+  #教材情報
+  /books:
+    get:
+      tags:
+        - books
+      summary: 教材のリストを表示
+      operationId: getBookList
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - books
+      summary: 教材を作成
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                summary:
+                  type: string
+                access_key:
+                  type: string
+                user_id:
+                  type: integer
+                  format: int32
+              required:
+                - name
+                - user_id
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad Request
+
+  /books/{bookID}:
+    get:
+      tags:
+        - books
+      summary: 指定した教材を表示
+      operationId: getBook
+      parameters:
+      - name: bookID
+        in: path
+        description: 指定する教材のidを指定
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+    delete:
+      tags:
+        - books
+      summary: 削除する教材のidを指定
+      operationId: deleteBook
+      parameters:
+        - name: bookID
+          in: path
+          description: 削除する教材のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - books
+      summary: 更新する教材のidを指定
+      operationId: updateBook
+      parameters:
+        - name: bookID
+          in: path
+          description: 更新する教材のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                summary:
+                  type: string
+                access_key:
+                  type: string
+                user_id:
+                  type: integer
+                  format: int32
+              required:
+                - name
+                - user_id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+
+  /books/{bookID}/questions:
+    get:
+      tags:
+        - books
+      summary: 教材の問題を表示
+      operationId: getQuestions
+      parameters:
+        - name: bookID
+          in: path
+          description: 表示する教材のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+  /books/addRecord:
+    post:
+      tags:
+        - books
+      summary: 教材に問題を登録
+      operationId: addRecord
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: integer
+                  format: int32
+                question_id:
+                  type: integer
+                  format: int32
+              required:
+                - book_id
+                - question_id
+      responses:
+        '201':
+          description: successful operation
+        '400':
+          description: Bad Request
+
+  /books/removeRecord:
+    delete:
+      tags:
+          - books
+      summary: 教材の問題を削除
+      operationId: removeRecord
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                book_id:
+                  type: integer
+                  format: int32
+                question_id:
+                  type: integer
+                  format: int32
+              required:
+                - book_id
+                - question_id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+  #問題情報
+  /questions:
+    get:
+      tags:
+        - questions
+      summary: 問題のリストを表示
+      operationId: getQuestionList
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - questions
+      summary: 問題を作成
+      operationId: createQuestion
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                format:
+                  type: string
+                  enum:
+                    - blank_select
+                    - coding
+                    - card_question
+                user_id:
+                  type: integer
+                  format: int32
+                mode:
+                  type: string
+                  enum:
+                    - 演習モード
+                    - テストモード
+                    - リアルタイムモード
+                time_limit:
+                  type: integer
+                  format: smallint
+                number_limit:
+                  type: integer
+                  format: smallint
+              required:
+                - name
+                - format
+                - user_id
+                - mode
+                - time_limit
+                - number_limit
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad Request
+
+
+  /questions/{questionID}:
+    get:
+      tags:
+          - questions
+      summary: 指定した問題を表示
+      operationId: getQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 表示する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad Request
+
+
+    delete:
+      tags:
+        - questions
+      summary: 削除する問題のidを指定
+      operationId: deleteQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 削除する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - questions
+      summary: 更新する問題のidを指定
+      operationId: updateQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 更新する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                format:
+                  type: string
+                  enum:
+                    - blank_select
+                    - coding
+                    - card_question
+                user_id:
+                  type: integer
+                  format: int32
+                mode:
+                  type: string
+                  enum:
+                    - 演習モード
+                    - テストモード
+                    - リアルタイムモード
+                time_limit:
+                  type: integer
+                  format: smallint
+                number_limit:
+                  type: integer
+                  format: smallint
+              required:
+                - name
+                - format
+                - user_id
+                - mode
+                - time_limit
+                - number_limit
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+
+  /questions/{questionID}/info:
+    get:
+      tags:
+        - questions
+      summary: 指定した問題を表示
+      operationId: getQuestionInfo
+      parameters:
+        - name: questionID
+          in: path
+          description: 表示する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Bad Request
+
+  /questions/blankselect/list:
+    get:
+      tags:
+        - "questions"
+      summary: blank_select_questionの問題のリストを取得
+      operationId: getBlankSelectQuestionList
+      parameters: []
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+
+  /questions/{questionID}/blankselect:
+    get:
+      tags:
+        - "questions"
+      summary: 詳細な問題を指定して表示
+      operationId: getBlankSelectQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 表示する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - questions
+      summary: 空欄補填問題を作成
+      operationId: createBlankSelectQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 作成する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                "language": "C",
+                "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                "select_blank": {
+                    "blank1": {
+                        "loc": {
+                            "10": [
+                                9,
+                                1
+                            ],
+                            "12": [
+                                11,
+                                1
+                            ]
+                        },
+                        "option": [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                        ]
+                    },
+                    "blank2": {
+                        "loc": {
+                            "12": [
+                                13,
+                                3
+                            ]
+                        },
+                        "option": [
+                            "j==i",
+                            "j>i",
+                            "j<i",
+                            "j>=i"
+                        ]
+                    },
+                    "blank3": {
+                        "loc": {
+                            "19": [
+                                7,
+                                7
+                            ]
+                        },
+                        "option": [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                        ]
+                    }
+                },
+                "correct_blank": {
+                    "blank1": "2",
+                    "blank2": "j<i",
+                    "blank3": "flag==0"
+                },
+                "stdinout": {
+                  "example1":{
+                      "in":"",
+                      "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                  }
+                },
+                "hint_type": "なし",
+                "max_exec_time": "3"
+              }
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - questions
+      summary: 削除する問題のidを指定
+      operationId: deleteBlankSelectQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 削除する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    
+    put:
+      tags:
+        - questions
+      summary: 更新する問題のidを指定
+      operationId: updateBlankSelectQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 更新する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                "language": "C",
+                "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                "select_blank": {
+                    "blank1": {
+                        "loc": {
+                            "10": [
+                                9,
+                                1
+                            ],
+                            "12": [
+                                11,
+                                1
+                            ]
+                        },
+                        "option": [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                        ]
+                    },
+                    "blank2": {
+                        "loc": {
+                            "12": [
+                                13,
+                                3
+                            ]
+                        },
+                        "option": [
+                            "j==i",
+                            "j>i",
+                            "j<i",
+                            "j>=i"
+                        ]
+                    },
+                    "blank3": {
+                        "loc": {
+                            "19": [
+                                7,
+                                7
+                            ]
+                        },
+                        "option": [
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                        ]
+                    }
+                },
+                "correct_blank": {
+                    "blank1": "2",
+                    "blank2": "j<i",
+                    "blank3": "flag==0"
+                },
+                "stdinout": {
+                  "example1":{
+                      "in":"",
+                      "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                  }
+                },
+                "hint_type": "なし",
+                "max_exec_time": "3"
+              }
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+
+  /questions/card/list:
+    get:
+      tags:
+        - "questions"
+      summary: card_questionの問題のリストを取得
+      operationId: getCardQuestionList
+      parameters: []
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cardquestion'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+  /questions/{questionID}/card:
+    get:
+      tags:
+        - "questions"
+      summary: card_questionの問題を指定して表示
+      operationId: getCardQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 表示する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - questions
+      summary: 空欄補填の作問問題を作成
+      operationId: createCardQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 削除する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                "language": "C",
+                "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                "card": {
+                    "card1": {
+                        "loc": {
+                            "line":10,
+                            "start":7,
+                            "end":14
+                        },
+                        "option": [
+                            "i=1;i<=100;i++",
+                            "i=2;i<100;i++",
+                            "i=2;i<=100;++i3",
+                            "i=1;i<100;i++"
+                        ]
+                    },
+                    "card2": {
+                        "loc": {
+                            "line":12,
+                            "start":11,
+                            "end":11
+                        },
+                        "option": [
+                            "j=1;j<=100;++j",
+                            "j=2;j<100;++j",
+                            "j=2;j<=100;++j",
+                            "i=1;i<100;++i"
+                        ]
+                    },
+                    "card3": {
+                        "loc": {
+                            "line":13,
+                            "start":10,
+                            "end":6
+                        },
+                        "option": [
+                            "i%j==0",
+                            "i%j=0",
+                            "i/j==0",
+                            "i/j=0"
+                        ]
+                    },
+                    "card4": {
+                        "loc": {
+                            "line":19,
+                            "start":8,
+                            "end":6
+                        },
+                        "option": [
+                            "break;",
+                            "continue;",
+                            "goto END;",
+                            "end;"
+                        ]
+                    }
+                },
+                "correct_blank": {
+                    "card1": "i=2;i<=100;i++",
+                    "card2": "j=2;j<i;j++",
+                    "card3": "i%j==0",
+                    "card4": "break"
+                },
+                "stdinout": {
+                  "example1":{
+                      "in":"",
+                      "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                  }
+                },
+                "hint_type": "なし",
+                "max_exec_time": "3"
+              }
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cardquestion'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - questions
+      summary: 削除する問題のidを指定
+      operationId: deleteCardQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 削除する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+    
+    put:
+      tags:
+        - questions
+      summary: 更新する問題のidを指定
+      operationId: updateCardQuestion
+      parameters:
+        - name: questionID
+          in: path
+          description: 更新する問題のidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "explain": "サンプルです。本体はここにHTML構文？ベースの文字列が入ります",
+                "language": "C",
+                "base_code": "#include <stdio.h>\nint main()\n{\n\tint i, j;\n\t\n\t/* 判定フラグ */\n\tint flag;\n\t\n\t/* 素数かどうかを判定 */\n\tfor( i=2;i<=100;i++ ) {\n\t\tflag = 0;\n\t\tfor( j=2;j<i;j++ ){\n\t\t\tif( i%j==0 ) {\n\t\t\t\tflag = 1;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\t/* 判定結果を出力 */\n\t\tif( flag==0 )\n\t\t\tprintf(\"%d \", i);\n\t}\n\t\n\treturn 0;\n}",
+                "card": {
+                    "card1": {
+                        "loc": {
+                            "line":10,
+                            "start":7,
+                            "end":14
+                        },
+                        "option": [
+                            "i=1;i<=100;i++",
+                            "i=2;i<100;i++",
+                            "i=2;i<=100;++i3",
+                            "i=1;i<100;i++"
+                        ]
+                    },
+                    "card2": {
+                        "loc": {
+                            "line":12,
+                            "start":11,
+                            "end":11
+                        },
+                        "option": [
+                            "j=1;j<=100;++j",
+                            "j=2;j<100;++j",
+                            "j=2;j<=100;++j",
+                            "i=1;i<100;++i"
+                        ]
+                    },
+                    "card3": {
+                        "loc": {
+                            "line":13,
+                            "start":10,
+                            "end":6
+                        },
+                        "option": [
+                            "i%j==0",
+                            "i%j=0",
+                            "i/j==0",
+                            "i/j=0"
+                        ]
+                    },
+                    "card4": {
+                        "loc": {
+                            "line":19,
+                            "start":8,
+                            "end":6
+                        },
+                        "option": [
+                            "break;",
+                            "continue;",
+                            "goto END;",
+                            "end;"
+                        ]
+                    }
+                },
+                "correct_blank": {
+                    "card1": "i=2;i<=100;i++",
+                    "card2": "j=2;j<i;j++",
+                    "card3": "i%j==0",
+                    "card4": "break"
+                },
+                "stdinout": {
+                  "example1":{
+                      "in":"",
+                      "out":"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 "
+                  }
+                },
+                "hint_type": "なし",
+                "max_exec_time": "3"
+              }
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+
+  #ログ情報
+  /logs:
+    get:
+      tags:
+        - "logs"
+      summary: ログ情報リストを取得
+      operationId: getLogInfoList
+      parameters: []
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loginfo'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    post:
+      tags:
+        - logs
+      summary: ログ情報を作成
+      operationId: createLogInfo
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id: 
+                  type: integer
+                  format: int32
+                group_id:
+                  type: integer
+                  format: int32
+                question_id:
+                  type: integer
+                  format: int32
+                question_version:
+                  type: string
+                elapsed_time:
+                  type: string
+                  format: date-time
+              required:
+                - user_id
+                - group_id
+                - question_id
+                - question_version
+                - elapsed_time
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+
+  /logs/{logID}:
+    get:
+      tags:
+        - "logs"
+      summary: ログ情報リストを取得
+      operationId: getLogInfo
+      parameters:
+        - name: logID
+          in: path
+          description: 取得するログのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loginfo'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - logs
+      summary: 削除するログのidを指定
+      operationId: deleteLogInfo
+      parameters:
+        - name: logID
+          in: path
+          description: 削除するログのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - logs
+      summary: 更新するログのidを指定
+      operationId: updateLogInfo
+      parameters:
+        - name: logID
+          in: path
+          description: 更新するログのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id: 
+                  type: integer
+                  format: int32
+                group_id:
+                  type: integer
+                  format: int32
+                question_id:
+                  type: integer
+                  format: int32
+                question_version:
+                  type: string
+                elapsed_time:
+                  type: string
+                  format: date-time
+              required:
+                - user_id
+                - group_id
+                - question_id
+                - question_version
+                - elapsed_time
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+
+  /logs/{infomation_log_id}/detail:
+    post:
+      tags:
+        - logs
+      summary: 詳細ログ情報を作成
+      operationId: createDetailLog
+      parameters:
+        - name: infomation_log_id
+          in: path
+          description: 作成するログのidを指定
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                turn:
+                  type: integer
+                  format: int32
+                result_type:
+                  type: string
+                answer:
+                  type: string
+                  format: jsonb
+              required:
+                - turn
+                - result_type
+                - answer
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blankselectquestion'
+        '400':
+          description: Bad Request
+  
+  /logs/detail/{logID}:
+    delete:
+
+    put:
+
+  
+
+
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        mail:
+          type: string
+        password_hash:
+          type: string
+        role:
+          type: string
+          description: 権限
+          enum:
+          - 学習者
+          - 教授者
+        created_at:
+          type: string
+          format: date-time
+    
+    Group:
+      type: object
+      properties:
+        group_id:
+          type: integer
+          format: int32
+        summary:
+          type: string
+        access_key:
+          type: string
+        user_id:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          format: date-time
+
+    Book:
+      type: object
+      properties:
+        book_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        summary:
+          type: string
+        access_key:
+          type: string
+        user_id:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          format: date-time
+
+    Question:
+      type: object
+      properties:
+        question_id: 
+          type: integer
+          format: int32
+        name: 
+          type: string
+        format:
+          type: string
+        user_id:
+          type: integer
+          format: int32
+        mode:
+          type: string
+        time_limit:
+          type: integer
+          format: smallint
+        number_limit:
+          type: integer
+          format: smallint
+        created_at:
+          type: string
+          format: date-time
+        question:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/blankselectquestion'
+              - $ref: '#/components/schemas/codingquestion'
+              - $ref: '#/components/schemas/cardquestion'
+        
+    Loginfo:
+      type: object
+      properties:
+        infomation_log_id:
+          type: integer
+          format: int32
+        user_id:
+          type: integer
+          format: int32
+        group_id:
+          type: integer
+          format: int32
+        question_id:
+          type: integer
+          format: int32
+        question_version:
+          type: string
+        elapsed_time:
+          type: integer
+          format: smallint
+        created_at:
+          type: string
+          format: date-time
+
+    Detaillog:
+      type: object
+      properties:
+        infomation_log_id:
+          type: integer
+          format: int32
+        turn:
+          type: integer
+          format: int32
+        result_type:
+          type: string
+        answer:
+          type: string
+          format: jsonb
+        answer_at:
+          type: string
+          format: date-time
+
+    blankselectquestion:
+      type: object
+      properties:
+        quesiton_id:
+          type: integer
+          format: int32
+        explain:
+          type: string
+          format: text
+        language:
+          type: string
+        base_code:
+          type: string
+          format: text
+        stdinout:
+          type: object
+          format: jsonb
+          properties:
+            example:
+              type: object
+              properties:
+                in:
+                  type: string
+                out:
+                  type: string
+        max_exec_time:
+          type: integer
+          format: smallint
+        select_blank:
+          type: object
+          properties:
+            blank:
+              type: object
+              properties:
+                loc:
+                  type: array
+                option:
+                  type: array
+        correct_blank:
+          type: object
+          format: jsonb
+          properties:
+            blank:
+              type: string
+        hint_type:
+          type: string
+
+    codingquestion:
+      type: object
+      properties:
+        quesiton_id:
+          type: integer
+          format: int32
+        explain:
+          type: string
+          format: text
+        language:
+          type: string
+        base_code:
+          type: string
+          format: text
+        stdinout:
+          type: object
+          format: jsonb
+          properties:
+            example:
+              type: object
+              properties:
+                in:
+                  type: string
+                out:
+                  type: string
+        max_exec_time:
+          type: integer
+          format: smallint
+        model_answer:
+          type: string
+          format: text
+        judge_format:
+          type: string
+        mandatory_words:
+          type: string
+        mini_lines:
+          type: integer
+          format: smallint
+
+    cardquestion:
+      type: object
+      properties:
+        quesiton_id:
+          type: integer
+          format: int32
+        explain:
+          type: string
+          format: text
+        language:
+          type: string
+        base_code:
+          type: string
+          format: text
+        card:
+          type: object
+          format: jsonb
+          properties:
+            card1:
+              type: object
+              properties:
+                loc:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                      format: smallint
+                      description: 何行目のコードをカードにするのか
+                    start:
+                      type: integer
+                      format: smallint
+                      description: 何文字目からカードにするのか
+                    end:
+                      type: integer
+                      format: smallint
+                      description: startから何文字カードにするのか
+        stdinout:
+          type: object
+          format: jsonb
+          properties:
+            example:
+              type: object
+              properties:
+                in:
+                  type: string
+                out:
+                  type: string
+        max_exec_time:
+          type: integer
+          format: smallint
+        correct_blank:
+          type: object
+          format: jsonb
+          properties:
+            blank:
+              type: string
+        hint_type:
+          type: string
+
+
+        
+    
+    Membership:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int32
+        group_id:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          format: date-time
+        group:
+          $ref: '#/components/schemas/Group'
+  
+    Collection:
+      type: object
+      properties:
+        group_id:
+          type: integer
+          format: int32
+        book_id:
+          type: integer
+          format: int32
+        created_at:
+          type: string
+          format: date-time
+  
