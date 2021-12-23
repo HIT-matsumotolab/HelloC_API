@@ -121,7 +121,7 @@ http://localhost:4000/api/users/
 
 認証はJWT形式で行っています
 
-※ モデル書き換えられるので　メモ程度
+※ モデル書き換えられるのでやらないで　メモ程度
 ```
 npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x データベースパスワード -e postgresql -l esm -C
 ```
