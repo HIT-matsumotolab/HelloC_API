@@ -13,7 +13,13 @@ exports.getGroupList = async (req, res) => {
     Group.findAll()
         .then(groups => {
             if(groups[0] === undefined){
-                return res.status(404).send('Not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             return res.send(groups);
         })
@@ -30,7 +36,13 @@ exports.getGroup = async (req, res) => {
     })
         .then(group => {
             if(group === null){
-                return res.status(404).send('Group not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             return res.status(200).send(group);
         })
@@ -52,7 +64,13 @@ exports.getBooks = async (req, res) => {
     })
         .then(result => {
             if(result[0] === undefined){
-                return res.status(404).send('Not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             return res.send(result);
         })
@@ -86,7 +104,13 @@ exports.deleteGroup = async (req, res) => {
     })
         .then(group => {
             if(group === null){
-                return res.status(404).send('Group not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             group.destroy();
             return res.send('deleted!');
@@ -111,7 +135,13 @@ exports.updateGroup = async (req, res) => {
             }, { transaction: t })
             .then(group => {
                 if(group === null){
-                    res.status(404).send('Group not found');
+                    res.status(404).json({
+                        "errors": [
+                            {
+                                "message": "Not Found"
+                            }
+                        ]
+                      });
                 }
                 return res.send('updated!');
             })
@@ -151,7 +181,13 @@ exports.removeUser = async (req, res) => {
     })
         .then(membership => {
             if(membership === null){
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             membership.destroy();
             return res.status(200).send('deleted!');
@@ -185,7 +221,13 @@ exports.removeBook = async (req, res) => {
     })
         .then(collection => {
             if(collection === null){
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
             }
             collection.destroy();
             return res.send('deleted!');

@@ -141,7 +141,13 @@ exports.createQuestion = async (req, res) => {
                 { "question_id": question.question_id }
             );
         } else {
-            return res.status(400).send('既にその問題は存在します');
+            return res.status(400).json({
+                "errors": [
+                    {
+                        "message": "既にその問題は存在します"
+                    }
+                ]
+              });
         }
     }).catch((error) => {
         console.log("ERROR処理");
@@ -160,7 +166,13 @@ exports.deleteQuestion = async (req, res) => {
             if(question === 1){
                 return res.status(200).send('deleted!');
             } else {
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
         })
         .catch((error) => {
@@ -183,7 +195,13 @@ exports.updateQuestion = async (req, res) => {
     })
         .then(question => {
             if(question[0] === 0){
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
             return res.send('updated!');
         })
@@ -198,7 +216,13 @@ exports.getBlankSelectQuestionList = async (req, res) => {
     BlankSelectQuestions.findAll()
         .then(blankselectquestions => {
             if(blankselectquestions[0] === undefined){
-                return res.status(404).send('Not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
             return res.send(blankselectquestions);
         })
@@ -214,7 +238,7 @@ exports.getBlankSelectQuestion = async (req, res) => {
     })
         .then(blankselectquestions => {
             if(blankselectquestions === null){
-                return res.status(404).send('Not found');
+                return res.status(404).send(error);
             }
             return res.send(blankselectquestions);
         })
@@ -228,7 +252,13 @@ exports.getCardQuestionList = async (req, res) => {
     CardQuestion.findAll()
         .then(cardquestions => {
             if(cardquestions[0] === undefined){
-                return res.status(404).send('Not found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
             return res.send(cardquestions);
         })
@@ -244,7 +274,13 @@ exports.getCardQuestion = async (req, res) => {
     })
     .then(cardquestion => {
         if(cardquestion === null){
-            return res.status(404).send('Not found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
         }
         return res.send(cardquestion);
     })
@@ -280,6 +316,14 @@ exports.createBlankSelectQuestion = async (req, res) => {
                         console.log("ERROR処理");
                         return res.status(400).send(error);
                     })
+            } else {
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
         })
 };
@@ -320,7 +364,13 @@ exports.deleteBlankSelectQuestion = async (req, res) => {
     })
         .then(blankselectquestions => {
             if(blankselectquestions === null){
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
             blankselectquestions.destroy();
             return res.send('deleted!');
@@ -337,7 +387,13 @@ exports.deleteCardQuestion = async (req, res) => {
     })
     .then(card => {
         if(card === null){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
         }
         card.destroy();
         return res.send('deleted!');
@@ -386,7 +442,13 @@ exports.updateBlankSelectQuestion = async (req, res) => {
                 return res.status(404).send('更新する問題がありません');
             })
         } else {
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
         }
     })
     .catch((error) => {
@@ -432,7 +494,13 @@ exports.updateCardQuestion = async (req, res) => {
                     return res.status(404).send('更新する問題がありません');
                 })
             } else {
-                return res.status(404).send('Not Found');
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
             }
         })
         .catch((error) => {

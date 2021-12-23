@@ -16,7 +16,13 @@ exports.getLogInfoList = async (req, res) => {
   LogInfo.findAll()
     .then(logs => {
       if(logs[0] === undefined){
-        return res.status(404).send('Not Found');
+        return res.status(404).json({
+          "errors": [
+              {
+                  "message": "Not Found"
+              }
+          ]
+        });
       }
       return res.send(logs);
     })
@@ -71,7 +77,13 @@ exports.deleteLogInfo = async (req, res) => {
       if(log === 1){
         return res.status(200).send('deleted!');
       } else {
-          return res.status(404).send('Not Found');
+          return res.status(404).json({
+            "errors": [
+                {
+                    "message": "Not Found"
+                }
+            ]
+          });
       }
     })
     .catch((error) => {
@@ -95,7 +107,13 @@ exports.updateLogInfo = async (req, res) => {
     })
     .then(log => {
       if(log[0] === 0){
-        return res.status(404).send('Not Found');
+        return res.status(404).json({
+          "errors": [
+              {
+                  "message": "Not Found"
+              }
+          ]
+        });
     }
     return res.send('updated!');
     })

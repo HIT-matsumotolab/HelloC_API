@@ -1,6 +1,4 @@
 import {initModels} from "../models/init-models.js";
-import questions from "../models/questions.js";
-import record from "../models/record.js";
 
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
@@ -13,7 +11,13 @@ exports.getBookList = async (req, res) => {
     Book.findAll({raw: true})
     .then(books => {
         if(books[0] === undefined){
-            return res.status(404).send('Not found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         return res.send(books);
     })
@@ -30,7 +34,13 @@ exports.getBook = async (req, res) => {
     })
     .then(book => {
         if(book === null){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         return res.send(book);
     })
@@ -50,7 +60,13 @@ exports.getQuestions = async (req, res) => {
     })
     .then(result => {
         if(result[0] === undefined){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         return res.send(result);
     })
@@ -83,7 +99,13 @@ exports.deleteBook = async (req, res) => {
     })
     .then(book => {
         if(book === null){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         book.destroy();
         return res.send('deleted!');
@@ -105,7 +127,13 @@ exports.updateBook = async (req, res) => {
     })
     .then(book => {
         if(book[0] === 0){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         return res.send('updated!');
     })
@@ -138,7 +166,13 @@ exports.removeRecord = async (req, res) => {
     })
     .then(record => {
         if(record === null){
-            return res.status(404).send('Not Found');
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+              });
         }
         record.destroy();
         return res.send('deleted!');

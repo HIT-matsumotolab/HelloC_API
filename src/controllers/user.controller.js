@@ -16,7 +16,13 @@ exports.getUserList = async (req, res) => {
   })
     .then(users => {
       if(users[0] === undefined){
-        return res.status(404).send('Not Found');
+        return res.status(404).json({
+          "errors": [
+              {
+                  "message": "Not Found"
+              }
+          ]
+        });
       }
       return res.send(users);
     })
@@ -35,7 +41,13 @@ exports.getUser = async (req, res) => {
   })
     .then(user => {
       if(user === null){
-        return res.status(404).send('Not Found')
+        return res.status(404).json({
+          "errors": [
+              {
+                  "message": "Not Found"
+              }
+          ]
+        });
       }
       // console.log(user);
       return res.send(user);
@@ -58,7 +70,13 @@ exports.getGroups = async (req, res) => {
   })
     .then(result => {
       if(result[0] === undefined){
-        return res.status(404).send('Not found');
+        return res.status(404).json({
+          "errors": [
+              {
+                  "message": "Not Found"
+              }
+          ]
+        });
       }
       return res.send(result);
     })
