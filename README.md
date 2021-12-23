@@ -74,7 +74,7 @@ exit
 ```
 初期データを入れる
 ```
-psql -f HelloC_API/initial-helloc-db.sql -Upostgres
+psql -f helloc.sql -Upostgres
 ```
 元のユーザー戻る
 ```
@@ -102,11 +102,6 @@ POSTGRES_PORT=5432
 POST=4000
 ```
 
-※ すでに作ってあるのでしなくていい　メモ程度
-```
-npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x データベースパスワード -e postgresql -l esm -C
-```
-
 # 実行
 ```
 npm install
@@ -124,4 +119,9 @@ http://localhost:4000/status
 http://localhost:4000/api/users/
 もいける
 
-認証系はないよ
+認証はJWT形式で行っています
+
+※ モデル書き換えられるので　メモ程度
+```
+npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x データベースパスワード -e postgresql -l esm -C
+```
