@@ -85,6 +85,15 @@ exports.getQuestionInfo = async (req, res) => {
                 BlankSelectQuestions.findOne({
                     where: { question_id: req.params.id }
                 }).then(info => {
+                    if(info === null){
+                        return res.status(404).json({
+                            "errors": [
+                                {
+                                    "message": "Not Found"
+                                }
+                            ]
+                        })
+                    }
                     return res.send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
@@ -94,6 +103,15 @@ exports.getQuestionInfo = async (req, res) => {
                 CodingQuestions.findOne({
                     where: { question_id: req.params.id }
                 }).then(info => {
+                    if(info === null){
+                        return res.status(404).json({
+                            "errors": [
+                                {
+                                    "message": "Not Found"
+                                }
+                            ]
+                        })
+                    }
                     return res.send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
@@ -103,6 +121,15 @@ exports.getQuestionInfo = async (req, res) => {
                 CardQuestion.findOne({
                     where: { question_id: req.params.id }
                 }).then(info => {
+                    if(info === null){
+                        return res.status(404).json({
+                            "errors": [
+                                {
+                                    "message": "Not Found"
+                                }
+                            ]
+                        })
+                    }
                     return res.send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
