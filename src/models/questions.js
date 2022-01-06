@@ -50,7 +50,7 @@ export default class questions extends Model {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
-    },
+    }
   }, {
     sequelize,
     tableName: 'questions',

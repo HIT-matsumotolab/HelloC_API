@@ -54,5 +54,5 @@ export default class record extends Model {
   });
   record.removeAttribute('id');
   return record;
-}
+  }
 }

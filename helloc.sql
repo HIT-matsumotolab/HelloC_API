@@ -134,6 +134,24 @@ CREATE TABLE IF NOT EXISTS detail_logs(
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
+DROP TABLE IF EXISTS card_detail_logs;
+CREATE TABLE IF NOT EXISTS card_detail_logs(
+    infomation_log_id   bigint NOT NULL,
+    card_detail_log_id  bigserial NOT NULL,
+    select_history       jsonb,
+    trial               smallint,
+    result_type         varchar,
+    answer              jsonb,
+    answer_at           timestamp   NOT NULL default CURRENT_TIMESTAMP,
+    CONSTRAINT card_detail_logs_pkey PRIMARY KEY(card_detail_log_id),
+    CONSTRAINT card_detail_logs_infomation_log_id_fkey FOREIGN KEY(infomation_log_id)
+        REFERENCES infomation_logs(infomation_log_id) MATCH SIMPLE
+        ON DELETE NO ACTION ON UPDATE CASCADE,
+    CONSTRAINT card_detail_logs_result_type_fkey FOREIGN KEY(result_type)
+        REFERENCES results(result_type) MATCH SIMPLE
+        ON DELETE NO ACTION ON UPDATE CASCADE
+);
+
 DROP TABLE IF EXISTS question_formats;
 CREATE TABLE IF NOT EXISTS question_formats(
     format      varchar NOT NULL,

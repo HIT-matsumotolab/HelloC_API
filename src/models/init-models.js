@@ -5,6 +5,7 @@ import _blank_question_hints from  "./blank_question_hints.js";
 import _blank_select_archives from  "./blank_select_archives.js";
 import _blank_select_questions from  "./blank_select_questions.js";
 import _books from  "./books.js";
+import _card_detail_logs from  "./card_detail_logs.js";
 import _card_question_hints from  "./card_question_hints.js";
 import _card_questions from  "./card_questions.js";
 import _coding_archives from  "./coding_archives.js";
@@ -31,6 +32,7 @@ export const initModels = (sequelize) => {
   const blank_select_archives = _blank_select_archives.init(sequelize, DataTypes);
   const blank_select_questions = _blank_select_questions.init(sequelize, DataTypes);
   const books = _books.init(sequelize, DataTypes);
+  const card_detail_logs = _card_detail_logs.init(sequelize, DataTypes);
   const card_question_hints = _card_question_hints.init(sequelize, DataTypes);
   const card_questions = _card_questions.init(sequelize, DataTypes);
   const coding_archives = _coding_archives.init(sequelize, DataTypes);
@@ -65,6 +67,8 @@ export const initModels = (sequelize) => {
   groups.hasMany(collection, { as: "collections", foreignKey: "group_id"});
   membership.belongsTo(groups, { as: "group", foreignKey: "group_id"});
   groups.hasMany(membership, { as: "memberships", foreignKey: "group_id"});
+  card_detail_logs.belongsTo(infomation_logs, { as: "infomation_log", foreignKey: "infomation_log_id"});
+  infomation_logs.hasMany(card_detail_logs, { as: "card_detail_logs", foreignKey: "infomation_log_id"});
   detail_logs.belongsTo(infomation_logs, { as: "infomation_log", foreignKey: "infomation_log_id"});
   infomation_logs.hasMany(detail_logs, { as: "detail_log", foreignKey: "infomation_log_id"});
   coding_archives.belongsTo(judge_formats, { as: "judge_format_judge_format", foreignKey: "judge_format"});
@@ -103,6 +107,8 @@ export const initModels = (sequelize) => {
   questions.hasOne(coding_questions, { as: "coding_question", foreignKey: "question_id"});
   record.belongsTo(questions, { as: "question", foreignKey: "question_id"});
   questions.hasMany(record, { as: "records", foreignKey: "question_id"});
+  card_detail_logs.belongsTo(results, { as: "result_type_result", foreignKey: "result_type"});
+  results.hasMany(card_detail_logs, { as: "card_detail_logs", foreignKey: "result_type"});
   detail_logs.belongsTo(results, { as: "result_type_result", foreignKey: "result_type"});
   results.hasMany(detail_logs, { as: "detail_logs", foreignKey: "result_type"});
   users.belongsTo(roles, { as: "role_role", foreignKey: "role"});
@@ -126,6 +132,7 @@ export const initModels = (sequelize) => {
     blank_select_archives,
     blank_select_questions,
     books,
+    card_detail_logs,
     card_question_hints,
     card_questions,
     coding_archives,
