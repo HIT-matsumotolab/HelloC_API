@@ -1,30 +1,34 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class detail_logs extends Model {
+export default class card_detail_logs extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     information_log_id: {
       type: DataTypes.BIGINT,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'information_logs',
         key: 'information_log_id'
       }
     },
-    detail_log_id: {
+    card_detail_log_id: {
       autoIncrement: true,
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true
     },
-    turn: {
+    select_history: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
+    trial: {
       type: DataTypes.SMALLINT,
-      allowNull: false
+      allowNull: true
     },
     result_type: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'results',
         key: 'result_type'
@@ -32,7 +36,7 @@ export default class detail_logs extends Model {
     },
     answer: {
       type: DataTypes.JSONB,
-      allowNull: false
+      allowNull: true
     },
     elapsed_time: {
       type: DataTypes.SMALLINT,
@@ -45,19 +49,19 @@ export default class detail_logs extends Model {
     }
   }, {
     sequelize,
-    tableName: 'detail_logs',
+    tableName: 'card_detail_logs',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "detail_logs_pkey",
+        name: "card_detail_logs_pkey",
         unique: true,
         fields: [
-          { name: "detail_log_id" },
+          { name: "card_detail_log_id" },
         ]
       },
     ]
   });
-  return detail_logs;
+  return card_detail_logs;
   }
 }
