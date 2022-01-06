@@ -4,12 +4,12 @@ const { Model, Sequelize } = _sequelize;
 export default class detail_logs extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    infomation_log_id: {
+    information_log_id: {
       type: DataTypes.BIGINT,
       allowNull: true,
       references: {
-        model: 'infomation_logs',
-        key: 'infomation_log_id'
+        model: 'information_logs',
+        key: 'information_log_id'
       }
     },
     detail_log_id: {
@@ -32,6 +32,10 @@ export default class detail_logs extends Model {
     },
     answer: {
       type: DataTypes.JSONB,
+      allowNull: false
+    },
+    elapsed_time: {
+      type: DataTypes.SMALLINT,
       allowNull: false
     },
     answer_at: {

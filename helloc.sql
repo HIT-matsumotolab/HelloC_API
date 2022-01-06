@@ -91,17 +91,30 @@ CREATE TABLE IF NOT EXISTS collection(
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-DROP TABLE IF EXISTS infomation_logs;
-CREATE TABLE IF NOT EXISTS infomation_logs(
-    infomation_log_id   bigserial,
+DROP TABLE IF EXISTS question_formats;
+CREATE TABLE IF NOT EXISTS question_formats(
+    format      varchar NOT NULL,
+    summary     varchar NOT NULL,
+    CONSTRAINT question_formats_pkey PRIMARY KEY(format)
+);
+
+INSERT INTO question_formats(format,summary) VALUES ('blank_select','空欄補填選択方式。複数ある選択肢の中から問題を選んで解答する');
+INSERT INTO question_formats(format,summary) VALUES ('coding','記述方式。問題文をもとに自らコーディングして解答する');
+INSERT INTO question_formats(format,summary) VALUES ('card_question','空欄補填の作問方式。ダミーを含む選択肢からカードを選んでコードを完成させる');
+
+DROP TABLE IF EXISTS information_logs;
+CREATE TABLE IF NOT EXISTS information_logs(
+    information_log_id   bigserial,
     user_id             integer NOT NULL,
     group_id            integer NOT NULL,
     question_id         integer NOT NULL,
-    question_version    varchar NOT NULL,
-    elapsed_time        smallint NOT NULL,
+    format              varchar NOT NULL,
     created_at          timestamp NOT NULL NOT NULL default CURRENT_TIMESTAMP,
-    CONSTRAINT infomation_logs_pkey PRIMARY KEY(infomation_log_id),
-    CONSTRAINT infomation_logs_user_id_fkey FOREIGN KEY(user_id)
+    CONSTRAINT information_logs_pkey PRIMARY KEY(information_log_id),
+    CONSTRAINT information_logs_formats_fkey FOREIGN KEY(format)
+        REFERENCES question_formats(format) MATCH SIMPLE
+        ON DELETE NO ACTION ON UPDATE CASCADE,
+    CONSTRAINT information_logs_user_id_fkey FOREIGN KEY(user_id)
         REFERENCES users(user_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
@@ -119,15 +132,16 @@ INSERT INTO results(result_type,summary) VALUES ('模範解答不一致','実行
 
 DROP TABLE IF EXISTS detail_logs;
 CREATE TABLE IF NOT EXISTS detail_logs(
-    infomation_log_id   bigint,
+    information_log_id   bigint,
     detail_log_id       bigserial,
     turn                smallint    NOT NULL,
     result_type         varchar     NOT NULL,
     answer              jsonb       NOT NULL,
+    elapsed_time        smallint    NOT NULL,
     answer_at           timestamp   NOT NULL default CURRENT_TIMESTAMP,
     CONSTRAINT detail_logs_pkey PRIMARY KEY(detail_log_id),
-    CONSTRAINT detail_logs_infomation_log_id_fkey FOREIGN KEY(infomation_log_id)
-        REFERENCES infomation_logs(infomation_log_id) MATCH SIMPLE
+    CONSTRAINT detail_logs_information_log_id_fkey FOREIGN KEY(information_log_id)
+        REFERENCES information_logs(information_log_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT detail_logs_result_type_fkey FOREIGN KEY(result_type)
         REFERENCES results(result_type) MATCH SIMPLE
@@ -136,32 +150,22 @@ CREATE TABLE IF NOT EXISTS detail_logs(
 
 DROP TABLE IF EXISTS card_detail_logs;
 CREATE TABLE IF NOT EXISTS card_detail_logs(
-    infomation_log_id   bigint NOT NULL,
-    card_detail_log_id  bigserial NOT NULL,
+    information_log_id   bigint     NOT NULL,
+    card_detail_log_id  bigserial  NOT NULL,
     select_history       jsonb,
     trial               smallint,
     result_type         varchar,
     answer              jsonb,
-    answer_at           timestamp   NOT NULL default CURRENT_TIMESTAMP,
+    elapsed_time        smallint   NOT NULL,
+    answer_at           timestamp  NOT NULL default CURRENT_TIMESTAMP,
     CONSTRAINT card_detail_logs_pkey PRIMARY KEY(card_detail_log_id),
-    CONSTRAINT card_detail_logs_infomation_log_id_fkey FOREIGN KEY(infomation_log_id)
-        REFERENCES infomation_logs(infomation_log_id) MATCH SIMPLE
+    CONSTRAINT card_detail_logs_information_log_id_fkey FOREIGN KEY(information_log_id)
+        REFERENCES information_logs(information_log_id) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT card_detail_logs_result_type_fkey FOREIGN KEY(result_type)
         REFERENCES results(result_type) MATCH SIMPLE
         ON DELETE NO ACTION ON UPDATE CASCADE
 );
-
-DROP TABLE IF EXISTS question_formats;
-CREATE TABLE IF NOT EXISTS question_formats(
-    format      varchar NOT NULL,
-    summary     varchar NOT NULL,
-    CONSTRAINT question_formats_pkey PRIMARY KEY(format)
-);
-
-INSERT INTO question_formats(format,summary) VALUES ('blank_select','空欄補填選択方式。複数ある選択肢の中から問題を選んで解答する');
-INSERT INTO question_formats(format,summary) VALUES ('coding','記述方式。問題文をもとに自らコーディングして解答する');
-INSERT INTO question_formats(format,summary) VALUES ('card_question','空欄補填の作問方式。ダミーを含む選択肢からカードを選んでコードを完成させる');
 
 DROP TABLE IF EXISTS question_modes;
 CREATE TABLE IF NOT EXISTS question_modes(

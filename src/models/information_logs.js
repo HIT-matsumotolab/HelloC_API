@@ -1,10 +1,10 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infomation_logs extends Model {
+export default class information_logs extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    infomation_log_id: {
+    information_log_id: {
       autoIncrement: true,
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -26,13 +26,13 @@ export default class infomation_logs extends Model {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    question_version: {
+    format: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    elapsed_time: {
-      type: DataTypes.SMALLINT,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'question_formats',
+        key: 'format'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -41,19 +41,19 @@ export default class infomation_logs extends Model {
     }
   }, {
     sequelize,
-    tableName: 'infomation_logs',
+    tableName: 'information_logs',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "infomation_logs_pkey",
+        name: "information_logs_pkey",
         unique: true,
         fields: [
-          { name: "infomation_log_id" },
+          { name: "information_log_id" },
         ]
       },
     ]
   });
-  return infomation_logs;
+  return information_logs;
   }
 }

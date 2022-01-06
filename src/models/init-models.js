@@ -13,7 +13,7 @@ import _coding_questions from  "./coding_questions.js";
 import _collection from  "./collection.js";
 import _detail_logs from  "./detail_logs.js";
 import _groups from  "./groups.js";
-import _infomation_logs from  "./infomation_logs.js";
+import _information_logs from  "./information_logs.js";
 import _judge_formats from  "./judge_formats.js";
 import _membership from  "./membership.js";
 import _mirror_questions from  "./mirror_questions.js";
@@ -40,7 +40,7 @@ export const initModels = (sequelize) => {
   const collection = _collection.init(sequelize, DataTypes);
   const detail_logs = _detail_logs.init(sequelize, DataTypes);
   const groups = _groups.init(sequelize, DataTypes);
-  const infomation_logs = _infomation_logs.init(sequelize, DataTypes);
+  const information_logs = _information_logs.init(sequelize, DataTypes);
   const judge_formats = _judge_formats.init(sequelize, DataTypes);
   const membership = _membership.init(sequelize, DataTypes);
   const mirror_questions = _mirror_questions.init(sequelize, DataTypes);
@@ -67,10 +67,10 @@ export const initModels = (sequelize) => {
   groups.hasMany(collection, { as: "collections", foreignKey: "group_id"});
   membership.belongsTo(groups, { as: "group", foreignKey: "group_id"});
   groups.hasMany(membership, { as: "memberships", foreignKey: "group_id"});
-  card_detail_logs.belongsTo(infomation_logs, { as: "infomation_log", foreignKey: "infomation_log_id"});
-  infomation_logs.hasMany(card_detail_logs, { as: "card_detail_logs", foreignKey: "infomation_log_id"});
-  detail_logs.belongsTo(infomation_logs, { as: "infomation_log", foreignKey: "infomation_log_id"});
-  infomation_logs.hasMany(detail_logs, { as: "detail_log", foreignKey: "infomation_log_id"});
+  card_detail_logs.belongsTo(information_logs, { as: "information_log", foreignKey: "information_log_id"});
+  information_logs.hasMany(card_detail_logs, { as: "card_detail_logs", foreignKey: "information_log_id"});
+  detail_logs.belongsTo(information_logs, { as: "information_log", foreignKey: "information_log_id"});
+  information_logs.hasMany(detail_logs, { as: "detail_logs", foreignKey: "information_log_id"});
   coding_archives.belongsTo(judge_formats, { as: "judge_format_judge_format", foreignKey: "judge_format"});
   judge_formats.hasMany(coding_archives, { as: "coding_archives", foreignKey: "judge_format"});
   coding_questions.belongsTo(judge_formats, { as: "judge_format_judge_format", foreignKey: "judge_format"});
@@ -93,6 +93,8 @@ export const initModels = (sequelize) => {
   programing_languages.hasMany(coding_questions, { as: "coding_questions", foreignKey: "language"});
   archive_questions.belongsTo(question_formats, { as: "format_question_format", foreignKey: "format"});
   question_formats.hasMany(archive_questions, { as: "archive_questions", foreignKey: "format"});
+  information_logs.belongsTo(question_formats, { as: "format_question_format", foreignKey: "format"});
+  question_formats.hasMany(information_logs, { as: "information_logs", foreignKey: "format"});
   questions.belongsTo(question_formats, { as: "format_question_format", foreignKey: "format"});
   question_formats.hasMany(questions, { as: "questions", foreignKey: "format"});
   archive_questions.belongsTo(question_modes, { as: "mode_question_mode", foreignKey: "mode"});
@@ -119,8 +121,8 @@ export const initModels = (sequelize) => {
   users.hasMany(books, { as: "books", foreignKey: "user_id"});
   groups.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(groups, { as: "groups", foreignKey: "user_id"});
-  infomation_logs.belongsTo(users, { as: "user", foreignKey: "user_id"});
-  users.hasMany(infomation_logs, { as: "infomation_logs", foreignKey: "user_id"});
+  information_logs.belongsTo(users, { as: "user", foreignKey: "user_id"});
+  users.hasMany(information_logs, { as: "information_logs", foreignKey: "user_id"});
   membership.belongsTo(users, { as: "user", foreignKey: "user_id"});
   users.hasMany(membership, { as: "memberships", foreignKey: "user_id"});
   questions.belongsTo(users, { as: "user", foreignKey: "user_id"});
@@ -140,7 +142,7 @@ export const initModels = (sequelize) => {
     collection,
     detail_logs,
     groups,
-    infomation_logs,
+    information_logs,
     judge_formats,
     membership,
     mirror_questions,

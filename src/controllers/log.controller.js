@@ -8,7 +8,7 @@ import { initModels } from "../models/init-models.js";
 const sequelize = require("../config/database");
 const models = initModels(sequelize);
 
-const LogInfo = models.infomation_logs;
+const LogInfo = models.information_logs;
 const Detail_log = models.detail_logs;
 const Card_Detail_log = models.card_detail_logs;
 const Result = models.results;
@@ -35,7 +35,7 @@ exports.getLogInfoList = async (req, res) => {
 
 exports.getLogInfo = async (req, res) => {
   LogInfo.findOne({
-    where: { infomation_log_id: req.params.id },
+    where: { information_log_id: req.params.id },
     include: [
         {
             model: Detail_log,
@@ -66,8 +66,7 @@ exports.createLogInfo = async (req, res) => {
     user_id: req.body.user_id,
     group_id: req.body.group_id,
     question_id: req.body.question_id,
-    question_version: req.body.question_version,
-    elapsed_time: req.body.elapsed_time
+    format: req.body.format
   })
     .then(log => {
       return res.status(201).send({log});
@@ -81,7 +80,7 @@ exports.createLogInfo = async (req, res) => {
 
 exports.deleteLogInfo = async (req, res) => {
   LogInfo.destroy({
-      where: { infomation_log_id: req.params.id }
+      where: { information_log_id: req.params.id }
     })
     .then(log => {
       if(log === 1){
@@ -109,11 +108,10 @@ exports.updateLogInfo = async (req, res) => {
         user_id: req.body.user_id,
         group_id: req.body.group_id,
         question_id: req.body.question_id,
-        question_version: req.body.question_version,
-        elapsed_time: req.body.elapsed_time
+        format: req.body.format
     },
     {
-        where: { infomation_log_id: req.params.id }
+        where: { information_log_id: req.params.id }
     })
     .then(log => {
       if(log[0] === 0){
@@ -165,17 +163,18 @@ exports.getCardDetailLogInfoList = async (req, res) => {
 
 exports.createDetailLog = async (req, res) => {
     LogInfo.findOne({
-        where: { infomation_log_id: req.params.id }
+        where: { information_log_id: req.params.id }
     })
     .then(async loginfo => {
-      // console.log(loginfo.question_version);
-      if(loginfo.question_version === 'blank_select' || loginfo.question_version === 'coding'){
+      // console.log(loginfo.format);
+      if(loginfo.format === 'blank_select' || loginfo.format === 'coding'){
         try {
           const log = await Detail_log.create({
-            infomation_log_id: loginfo.infomation_log_id,
+            information_log_id: loginfo.information_log_id,
             turn: req.body.turn,
             result_type: req.body.result_type,
-            answer: req.body.answer
+            answer: req.body.answer,
+            elapsed_time: req.body.elapsed_time
           });
           return res.send(log);
         } catch (error) {
@@ -206,17 +205,18 @@ exports.createDetailLog = async (req, res) => {
 
 exports.createCardDetailLog = async (req, res) => {
     LogInfo.findOne({
-        where: { infomation_log_id: req.params.id }
+        where: { information_log_id: req.params.id }
     })
     .then(async loginfo => {
-      if(loginfo.question_version === 'card_question'){
+      if(loginfo.format === 'card_question'){
         try {
           const log = await Card_Detail_log.create({
-            infomation_log_id: loginfo.infomation_log_id,
+            information_log_id: loginfo.information_log_id,
             select_history: req.body.select_history,
             trial: req.body.trial,
             result_type: req.body.result_type,
-            answer: req.body.answer
+            answer: req.body.answer,
+            elapsed_time: req.body.elapsed_time
           });
           return res.send(log);
         } catch (error) {
@@ -247,13 +247,14 @@ exports.createCardDetailLog = async (req, res) => {
 
 // exports.updateDetailLog = async (req, res) => {
 //     LogInfo.findOne({
-//         where: { infomation_log_id: req.params.id }
+//         where: { information_log_id: req.params.id }
 //     })
 //     .then(result => {
 //         return result.update({
 //             turn: req.body.turn,
 //             result_type: req.body.result_type,
-//             answer: req.body.answer
+//             answer: req.body.answer,
+//             elapsed_time: req.body.elapsed_time
 //         })
 //         .then(log => {
 //             return res.send(log);
@@ -266,14 +267,15 @@ exports.createCardDetailLog = async (req, res) => {
 // };
 // exports.updateCardDetailLog = async (req, res) => {
 //   LogInfo.findOne({
-//       where: { infomation_log_id: req.params.id }
+//       where: { information_log_id: req.params.id }
 //   })
 //   .then(result => {
 //       return Card_Detail_log.update({
 //           select_history: req.body.select_history,
 //           trial: req.body.trial,
 //           result_type: req.body.result_type,
-//           answer: req.body.answer
+//           answer: req.body.answer,
+//           elapsed_time: req.body.elapsed_time
 //       })
 //       .then(log => {
 //           return res.send(log);
