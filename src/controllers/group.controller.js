@@ -1,4 +1,3 @@
-import { raw } from "express";
 import { initModels } from "../models/init-models.js";
 
 const sequelize = require("../config/database");
