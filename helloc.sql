@@ -106,7 +106,6 @@ DROP TABLE IF EXISTS information_logs;
 CREATE TABLE IF NOT EXISTS information_logs(
     information_log_id   bigserial,
     user_id             integer NOT NULL,
-    group_id            integer NOT NULL,
     question_id         integer NOT NULL,
     format              varchar NOT NULL,
     created_at          timestamp NOT NULL NOT NULL default CURRENT_TIMESTAMP,

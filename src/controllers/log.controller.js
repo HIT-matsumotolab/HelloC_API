@@ -64,7 +64,6 @@ exports.getLogInfo = async (req, res) => {
 exports.createLogInfo = async (req, res) => {
   LogInfo.create({
     user_id: req.body.user_id,
-    group_id: req.body.group_id,
     question_id: req.body.question_id,
     format: req.body.format
   })
@@ -106,7 +105,6 @@ exports.updateLogInfo = async (req, res) => {
   LogInfo.update(
     {
         user_id: req.body.user_id,
-        group_id: req.body.group_id,
         question_id: req.body.question_id,
         format: req.body.format
     },

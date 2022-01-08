@@ -18,10 +18,6 @@ export default class information_logs extends Model {
         key: 'user_id'
       }
     },
-    group_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     question_id: {
       type: DataTypes.INTEGER,
       allowNull: false
