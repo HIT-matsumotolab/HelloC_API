@@ -77,6 +77,7 @@ exit
 psql -f helloc.sql -Upostgres
 ```
 helloc元データを入れる
+※users→groups→books→questions→blank_select_questions→coding_questionsの順番で
 ```
 cd 元データ
 psql -U postgres -d helloc -f users.sql
