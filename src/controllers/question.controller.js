@@ -535,3 +535,162 @@ exports.updateCardQuestion = async (req, res) => {
             return res.status(400).send(error);
         })
 };
+
+
+//coding
+exports.getCodingQuestionList = async (req, res) => {
+    CodingQuestions.findAll()
+        .then(codingquestions => {
+            if(codingquestions[0] === undefined){
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
+            }
+            return res.send(codingquestions);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            return res.status(400).send(error);
+        });
+};
+
+
+exports.getCodingQuestion = async (req, res) => {
+    CodingQuestions.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(codingquestion => {
+        if(codingquestion === null){
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
+        }
+        return res.send(codingquestion);
+    })
+    .catch((error) => {
+        console.log("ERROR処理");
+        return res.status(400).send(error);
+    })
+}
+
+exports.createCodingQuestion = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id }
+    })
+        .then(question => {
+            if (question.format === "coding") {
+                return CodingQuestions
+                    .create({
+                        question_id: question.question_id,
+                        explain: req.body.explain,
+                        language: req.body.language,
+                        base_code: req.body.base_code,
+                        stdinout: req.body.stdinout,
+                        max_exec_time: req.body.max_exec_time,
+                        model_answer: req.body.model_answer,
+                        judge_format: req.body.judge_format,
+                        mandatory_words: req.body.mandatory_words,
+                        mini_lines: req.body.mini_lines
+                    })
+                    .then(codingquestion => {
+                        return res.status(201).send(codingquestion);
+                    })
+                    .catch((error) => {
+                        console.log("ERROR処理");
+                        return res.status(400).send(error);
+                    })
+            } else {
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
+            }
+        })
+};
+
+exports.deleteCodingQuestion = async (req, res) => {
+    CodingQuestions.findOne({
+        where: { question_id: req.params.id }
+    })
+        .then(codingquestions => {
+            if(codingquestions === null){
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                });
+            }
+            codingquestions.destroy();
+            return res.send('deleted!');
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            return res.status(400).send(error);
+        });
+};
+
+exports.updateCodingQuestion = async (req, res) => {
+    Question.findOne({
+        where: { question_id: req.params.id }
+    })
+    .then(question => {
+        if (question.format === "coding") {
+            return CodingQuestions
+            .findOne({
+                where: { question_id: req.params.id }
+            })
+            .then(coding => {
+                return CodingQuestions
+                    .update({
+                        question_id: question.question_id,
+                        explain: req.body.explain,
+                        language: req.body.language,
+                        base_code: req.body.base_code,
+                        stdinout: req.body.stdinout,
+                        max_exec_time: req.body.max_exec_time,
+                        model_answer: req.body.model_answer,
+                        judge_format: req.body.judge_format,
+                        mandatory_words: req.body.mandatory_words,
+                        mini_lines: req.body.mini_lines
+                    }, {
+                        where: { question_id: coding.question_id }
+                    })
+                    .then(result => {
+                        return res.send('updated!');
+                    })
+                    .catch((error) => {
+                        console.log("ERROR処理");
+                        return res.status(400).send(error);
+                    });
+            })
+            .catch((error) => {
+                return res.status(404).send('更新する問題がありません');
+            })
+        } else {
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
+        }
+    })
+    .catch((error) => {
+        console.log('ERROR処理');
+        return res.status(400).send(error);
+    })
+};
