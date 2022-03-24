@@ -55,7 +55,7 @@ exports.getGroup = async (req, res) => {
 exports.getBooks = async (req, res) => {
     Collection.findAll({
         where: { group_id: req.params.id },
-        raw: true,
+        // raw: true,
         include: [{
             model: Book,
             as: 'book'

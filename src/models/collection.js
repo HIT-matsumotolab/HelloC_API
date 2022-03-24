@@ -36,7 +36,7 @@ export default class collection extends Model {
       {
         name: "collection_group_id_book_id_key",
         unique: true,
-        // primaryKey: true,
+        primaryKey: true,
         fields: [
           { name: "group_id" },
           { name: "book_id" },
