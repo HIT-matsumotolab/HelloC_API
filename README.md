@@ -76,6 +76,12 @@ exit
 ```
 psql -f helloc.sql -Upostgres
 ```
+helloc元データを入れる
+```
+cd 元データ
+psql -U postgres -d helloc -f users.sql
+```
+
 元のユーザー戻る
 ```
 exit
