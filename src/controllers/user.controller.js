@@ -126,7 +126,7 @@ exports.updateUser = async (req, res) => {
     {
       name: req.body.name,
       mail: req.body.mail,
-      password_hash: req.body.password,//hash化してね
+      password_hash: bcrypt.hashSync(req.body.password, 10),
       role: req.body.role
     },
     {
