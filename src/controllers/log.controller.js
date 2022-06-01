@@ -35,13 +35,7 @@ exports.getLogInfoList = async (req, res) => {
 
 exports.getLogInfo = async (req, res) => {
   LogInfo.findOne({
-    where: { information_log_id: req.params.id },
-    include: [
-        {
-            model: Detail_log,
-            as: 'detail_log'
-        }
-    ]
+    where: { information_log_id: req.params.id }
   })
     .then(log => {
       if(log === null){
@@ -53,7 +47,34 @@ exports.getLogInfo = async (req, res) => {
           ]
         });
       }
-      return res.send(log);
+      if(log.format === 'card_question'){
+        LogInfo.findOne({
+          where: { information_log_id: req.params.id },
+          include: [{
+            model: Card_Detail_log,
+            as: 'card_detail_logs'
+          }]
+        }).then(logs => {
+          return res.send(logs);
+        }).catch((error) => {
+          console.log("ERROR処理");
+          return res.status(400).send(error);
+        })
+      }
+      else if(log.format === 'blank_select' || log.format === 'coding'){
+        LogInfo.findOne({
+          where: { information_log_id: req.params.id },
+          include: [{
+            model: Detail_log,
+            as: 'detail_logs'
+          }]
+        }).then(logs => {
+          return res.send(logs);
+        }).catch((error) => {
+          console.log("ERROR処理");
+          return res.status(400).send(error);
+        })
+      }
     })
     .catch((error) => {
       console.log("ERROR処理");
