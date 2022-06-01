@@ -73,7 +73,13 @@ exports.getQuestion = async (req, res) => {
         })
         .catch((error) => {
             console.log("ERROR処理");
-            return res.status(400).send(error);
+            return res.status(404).json({
+                "errors": [
+                    {
+                        "message": "Not Found"
+                    }
+                ]
+            });
         });
 };
 exports.getQuestionInfo = async (req, res) => {
