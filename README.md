@@ -132,3 +132,14 @@ http://localhost:4000/api/users/
 ```
 npx sequelize-auto -o "./src/models" -d helloc -h localhost -u postgres -p 5432 -x password -e postgresql -l esm -C
 ```
+
+データベース確認方法
+```
+su postgres
+psql
+\c helloc
+```
+テーブル確認
+\dt;
+
+コマンドは基本mysqlと同じです
