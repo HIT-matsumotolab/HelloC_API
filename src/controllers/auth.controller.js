@@ -1,4 +1,4 @@
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 
 
 import { initModels } from "../models/init-models.js";
@@ -12,7 +12,7 @@ const User = models.users;
 const Role =models.roles;
 
 var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+// var bcrypt = require("bcryptjs");
 
 exports.signup = async (req, res) => {
   try {
@@ -53,6 +53,7 @@ exports.signin = (req, res) => {
     raw: true
   })
     .then(user => {
+      console.log(user);
       if (!user) {
         return res.status(404).json({
           "errors": [
@@ -63,8 +64,8 @@ exports.signin = (req, res) => {
         });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
+      var passwordIsValid = (
+        bcrypt.hashSync(req.body.password, 10),
         user.password_hash
       );
 
