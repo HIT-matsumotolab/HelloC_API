@@ -182,3 +182,29 @@ exports.removeRecord = async (req, res) => {
         return res.status(400).send(error);
     });
 };
+exports.getRecord = async (req, res) => {
+    Record.findAll({
+        where: { book_id: req.params.id },
+        // raw: true,
+        include: [{
+            model: Questions,
+            as: 'question'
+        }]
+    })
+        .then(result => {
+            if(result[0] === undefined){
+                return res.status(404).json({
+                    "errors": [
+                        {
+                            "message": "Not Found"
+                        }
+                    ]
+                  });
+            }
+            return res.send(result);
+        })
+        .catch((error) => {
+            console.log("ERROR処理");
+            return res.status(400).send(error);
+        });
+};
