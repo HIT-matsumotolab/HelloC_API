@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const auth = require('../controllers/auth.controller');
 const router = Router();
-const { verifySignUp } = require("../middleware");
+const { verifySignUp, authJwt } = require("../middleware");
 
 router.use(function(req, res, next) {
     res.header(
@@ -10,15 +10,31 @@ router.use(function(req, res, next) {
     );
     next();
 })
-router.post(
+.post(
     '/signup',
     [
         verifySignUp.checkDuplicateMail,
-        verifySignUp.checkRolesExisted
+        verifySignUp.checkRolesExisted,
+        auth.signup
     ],
-    auth.signup
-);
-router.post('/signin', auth.signin);
+)
+.get(
+    '/user',
+    [
+        authJwt.verifyToken,
+        authJwt.isUser,
+        auth.userBoard
+    ],
+)
+.get(
+    '/admin',
+    [
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+        auth.adminBoard
+    ],
+)
+.post('/signin', auth.signin);
 
 // router.post('/', auth.start);
 

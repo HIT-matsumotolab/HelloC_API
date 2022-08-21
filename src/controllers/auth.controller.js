@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
-
-
 import { initModels } from "../models/init-models.js";
+import { Op } from "sequelize";
 
 const config = require("../config/auth.js");
 
@@ -15,40 +14,45 @@ var jwt = require("jsonwebtoken");
 // var bcrypt = require("bcryptjs");
 
 exports.signup = async (req, res) => {
-  try {
-    await sequelize.transaction(async (t) => {
-      const user = await User.create({
+  await sequelize.transaction(async (t) => {
+    console.log(req.body.mail);
+    User.findOrCreate({
+      where: {
+        [Op.and]: {
+            mail: req.body.mail
+
+        }
+      },
+      defaults: {
         name: req.body.name,
         mail: req.body.mail,
         password_hash: bcrypt.hashSync(req.body.password, 10),
         role: req.body.role
-      }, { transaction: t })
-      .catch(error => {
-        res.status(404).send({ message: "Role does not exist"});
-      })
-
-      // if (user.role) {
-        console.log(user.role);
-        await Role.findOne({
-          where: {
-            role: req.body.role
-          },
-          raw: true
-        }, { transaction: t }).then(roles => {
-          console.log(roles);
-          res.send({ message: "User was registered successfully!" });
-        });
+      }
+    }).then(([auth, created]) => {
+      if(created) {
+        return res.status(400).send({ message: "User was registered successfully!" });
+      }
+    }).catch((error) => {
+      console.log("ERROR処理");
+      console.log(error);
+      return res.status(400).json({
+        "errors": [
+            {
+                "message": "登録できませんでした"
+            }
+        ]
+      });
     })
-  }
-    catch (error) {
-        console.log(error);
-    };
+  });
 };
 
 exports.signin = (req, res) => {
+  // console.log('Cookies: ', req.cookies)
   User.findOne({
     where: {
-      mail: req.body.mail
+      mail: req.body.mail,
+      // password: bcrypt.matches(req.body.password)
     },
     raw: true
   })
@@ -65,8 +69,10 @@ exports.signin = (req, res) => {
       }
 
       var passwordIsValid = (
-        bcrypt.hashSync(req.body.password, 10),
-        user.password_hash
+        bcrypt.compareSync(req.body.password, user.password_hash)
+        // console.log(bcrypt.hashSync(req.body.password, 10)),
+        // user.password_hash
+        // console.log(user.password_hash)
       );
 
       if (!passwordIsValid) {
@@ -83,7 +89,6 @@ exports.signin = (req, res) => {
       var token = jwt.sign({ user_id: user.user_id }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
-
       res.status(200).send({
         user_id: user.user_id,
         name: user.name,
@@ -97,7 +102,25 @@ exports.signin = (req, res) => {
       res.status(500).send(err);
     });
 };
-
+exports.userBoard = (req, res) => {
+  res.status(200).send({
+    user_id: req.user_id,
+    name: req.name,
+    mail: req.mail,
+    role: req.role,
+    accessToken: req.token
+  });
+};
+exports.adminBoard = (req, res) => {
+  // console.log(req);
+  res.status(200).send({
+    user_id: req.user_id,
+    name: req.name,
+    mail: req.mail,
+    role: req.role,
+    accessToken: req.token
+  });
+};
 // exports.start = async (req, res) => {
 //     User.findOne({
 //         where: { mail: req.body.mail }
