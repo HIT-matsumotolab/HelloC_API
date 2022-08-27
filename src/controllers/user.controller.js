@@ -62,7 +62,7 @@ exports.getUser = async (req, res) => {
 exports.getGroups = async (req, res) => {
   Membership.findAll({
     where: { user_id: req.params.id },
-    raw: true,
+    // raw: true,
     include: [{
       model: models.groups,
       as: 'group'
