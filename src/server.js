@@ -42,7 +42,7 @@ app.get('/status', (req, res) => {
 
 app.use(cors(
   {
-    origin: 'http://localhost:3001',
+    origin: ['http://localhost:3000','http://localhost:8000'],
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
     credentials: true
   }
