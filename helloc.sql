@@ -133,7 +133,8 @@ DROP TABLE IF EXISTS detail_logs;
 CREATE TABLE IF NOT EXISTS detail_logs(
     information_log_id   bigint,
     detail_log_id       bigserial,
-    turn                smallint    NOT NULL,
+    select_history      jsonb,
+    trial               smallint    NOT NULL,
     result_type         varchar     NOT NULL,
     answer              jsonb       NOT NULL,
     elapsed_time        smallint    NOT NULL,

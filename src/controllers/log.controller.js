@@ -190,7 +190,8 @@ exports.createDetailLog = async (req, res) => {
         try {
           const log = await Detail_log.create({
             information_log_id: loginfo.information_log_id,
-            turn: req.body.turn,
+            select_history: req.body.select_history,
+            trial: req.body.trial,
             result_type: req.body.result_type,
             answer: req.body.answer,
             elapsed_time: req.body.elapsed_time

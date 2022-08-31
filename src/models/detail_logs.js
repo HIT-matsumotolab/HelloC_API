@@ -18,7 +18,11 @@ export default class detail_logs extends Model {
       allowNull: false,
       primaryKey: true
     },
-    turn: {
+    select_history: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
+    trial: {
       type: DataTypes.SMALLINT,
       allowNull: false
     },
