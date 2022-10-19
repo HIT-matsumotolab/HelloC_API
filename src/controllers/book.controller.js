@@ -11,7 +11,7 @@ exports.getBookList = async (req, res) => {
     Book.findAll({raw: true})
     .then(books => {
         if(books[0] === undefined){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -34,7 +34,7 @@ exports.getBook = async (req, res) => {
     })
     .then(book => {
         if(book === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -60,7 +60,7 @@ exports.getQuestions = async (req, res) => {
     })
     .then(result => {
         if(result[0] === undefined){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -99,7 +99,7 @@ exports.deleteBook = async (req, res) => {
     })
     .then(book => {
         if(book === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -166,7 +166,7 @@ exports.removeRecord = async (req, res) => {
     })
     .then(record => {
         if(record === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -193,7 +193,7 @@ exports.getRecord = async (req, res) => {
     })
         .then(result => {
             if(result[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"

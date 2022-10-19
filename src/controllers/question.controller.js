@@ -13,7 +13,7 @@ exports.getQuestionList = async (req, res) => {
     Question.findAll({raw:true})
         .then(questions => {
             if(questions[0] === undefined){
-                return res.status(404).send('Not found');
+                return res.status(401).send('Not found');
             }
             return res.send(questions);
         })
@@ -38,7 +38,7 @@ exports.getQuestion = async (req, res) => {
                         as: 'blank_select_question'
                     }]
                 }).then(info => {
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -51,7 +51,7 @@ exports.getQuestion = async (req, res) => {
                         as: 'coding_question'
                     }]
                 }).then(info => {
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -64,7 +64,7 @@ exports.getQuestion = async (req, res) => {
                         as: 'card_question'
                     }]
                 }).then(info => {
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -73,7 +73,7 @@ exports.getQuestion = async (req, res) => {
         })
         .catch((error) => {
             console.log("ERROR処理");
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -92,7 +92,7 @@ exports.getQuestionInfo = async (req, res) => {
                     where: { question_id: req.params.id }
                 }).then(info => {
                     if(info === null){
-                        return res.status(404).json({
+                        return res.status(401).json({
                             "errors": [
                                 {
                                     "message": "Not Found"
@@ -100,7 +100,7 @@ exports.getQuestionInfo = async (req, res) => {
                             ]
                         })
                     }
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -110,7 +110,7 @@ exports.getQuestionInfo = async (req, res) => {
                     where: { question_id: req.params.id }
                 }).then(info => {
                     if(info === null){
-                        return res.status(404).json({
+                        return res.status(401).json({
                             "errors": [
                                 {
                                     "message": "Not Found"
@@ -118,7 +118,7 @@ exports.getQuestionInfo = async (req, res) => {
                             ]
                         })
                     }
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -128,7 +128,7 @@ exports.getQuestionInfo = async (req, res) => {
                     where: { question_id: req.params.id }
                 }).then(info => {
                     if(info === null){
-                        return res.status(404).json({
+                        return res.status(401).json({
                             "errors": [
                                 {
                                     "message": "Not Found"
@@ -136,7 +136,7 @@ exports.getQuestionInfo = async (req, res) => {
                             ]
                         })
                     }
-                    return res.send(info);
+                    return res.status(200).send(info);
                 }).catch((error) => {
                     console.log("ERROR処理");
                     return res.status(400).send(error);
@@ -174,7 +174,7 @@ exports.createQuestion = async (req, res) => {
                 { "question_id": question.question_id }
             );
         } else {
-            return res.status(400).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "既にその問題は存在します"
@@ -199,7 +199,7 @@ exports.deleteQuestion = async (req, res) => {
             if(question === 1){
                 return res.status(200).send('deleted!');
             } else {
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -228,7 +228,7 @@ exports.updateQuestion = async (req, res) => {
     })
         .then(question => {
             if(question[0] === 0){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -236,7 +236,7 @@ exports.updateQuestion = async (req, res) => {
                     ]
                 });
             }
-            return res.send('updated!');
+            return res.status(200).send('updated!');
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -249,7 +249,7 @@ exports.getBlankSelectQuestionList = async (req, res) => {
     BlankSelectQuestions.findAll()
         .then(blankselectquestions => {
             if(blankselectquestions[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -271,9 +271,9 @@ exports.getBlankSelectQuestion = async (req, res) => {
     })
         .then(blankselectquestions => {
             if(blankselectquestions === null){
-                return res.status(404).send(error);
+                return res.status(401).send(error);
             }
-            return res.send(blankselectquestions);
+            return res.status(200).send(blankselectquestions);
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -285,7 +285,7 @@ exports.getCardQuestionList = async (req, res) => {
     CardQuestion.findAll()
         .then(cardquestions => {
             if(cardquestions[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -293,7 +293,7 @@ exports.getCardQuestionList = async (req, res) => {
                     ]
                 });
             }
-            return res.send(cardquestions);
+            return res.status(200).send(cardquestions);
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -307,7 +307,7 @@ exports.getCardQuestion = async (req, res) => {
     })
     .then(cardquestion => {
         if(cardquestion === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -315,7 +315,7 @@ exports.getCardQuestion = async (req, res) => {
                 ]
             });
         }
-        return res.send(cardquestion);
+        return res.status(200).send(cardquestion);
     })
     .catch((error) => {
         console.log("ERROR処理");
@@ -350,7 +350,7 @@ exports.createBlankSelectQuestion = async (req, res) => {
                         return res.status(400).send(error);
                     })
             } else {
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -397,7 +397,7 @@ exports.deleteBlankSelectQuestion = async (req, res) => {
     })
         .then(blankselectquestions => {
             if(blankselectquestions === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -406,7 +406,7 @@ exports.deleteBlankSelectQuestion = async (req, res) => {
                 });
             }
             blankselectquestions.destroy();
-            return res.send('deleted!');
+            return res.status(200).send('deleted!');
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -420,7 +420,7 @@ exports.deleteCardQuestion = async (req, res) => {
     })
     .then(card => {
         if(card === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -429,7 +429,7 @@ exports.deleteCardQuestion = async (req, res) => {
             });
         }
         card.destroy();
-        return res.send('deleted!');
+        return res.status(200).send('deleted!');
     })
     .catch((error) => {
         console.log("ERROR処理");
@@ -464,7 +464,7 @@ exports.updateBlankSelectQuestion = async (req, res) => {
                         where: { question_id: blank.question_id }
                     })
                     .then(result => {
-                        return res.send('updated!');
+                        return res.status(200).send('updated!');
                     })
                     .catch((error) => {
                         console.log("ERROR処理");
@@ -472,10 +472,10 @@ exports.updateBlankSelectQuestion = async (req, res) => {
                     });
             })
             .catch((error) => {
-                return res.status(404).send('更新する問題がありません');
+                return res.status(401).send('更新する問題がありません');
             })
         } else {
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -516,7 +516,7 @@ exports.updateCardQuestion = async (req, res) => {
                             where: { question_id: card.question_id }
                         })
                         .then(result => {
-                            return res.send('updated!');
+                            return res.status(200).send('updated!');
                         })
                         .catch((error) => {
                             console.log("ERROR処理");
@@ -524,10 +524,10 @@ exports.updateCardQuestion = async (req, res) => {
                         });
                 })
                 .catch((error) => {
-                    return res.status(404).send('更新する問題がありません');
+                    return res.status(401).send('更新する問題がありません');
                 })
             } else {
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -548,7 +548,7 @@ exports.getCodingQuestionList = async (req, res) => {
     CodingQuestions.findAll()
         .then(codingquestions => {
             if(codingquestions[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -556,7 +556,7 @@ exports.getCodingQuestionList = async (req, res) => {
                     ]
                 });
             }
-            return res.send(codingquestions);
+            return res.status(200).send(codingquestions);
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -571,7 +571,7 @@ exports.getCodingQuestion = async (req, res) => {
     })
     .then(codingquestion => {
         if(codingquestion === null){
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"
@@ -579,7 +579,7 @@ exports.getCodingQuestion = async (req, res) => {
                 ]
             });
         }
-        return res.send(codingquestion);
+        return res.status(200).send(codingquestion);
     })
     .catch((error) => {
         console.log("ERROR処理");
@@ -614,7 +614,7 @@ exports.createCodingQuestion = async (req, res) => {
                         return res.status(400).send(error);
                     })
             } else {
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -631,7 +631,7 @@ exports.deleteCodingQuestion = async (req, res) => {
     })
         .then(codingquestions => {
             if(codingquestions === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -640,7 +640,7 @@ exports.deleteCodingQuestion = async (req, res) => {
                 });
             }
             codingquestions.destroy();
-            return res.send('deleted!');
+            return res.status(200).send('deleted!');
         })
         .catch((error) => {
             console.log("ERROR処理");
@@ -675,7 +675,7 @@ exports.updateCodingQuestion = async (req, res) => {
                         where: { question_id: coding.question_id }
                     })
                     .then(result => {
-                        return res.send('updated!');
+                        return res.status(200).send('updated!');
                     })
                     .catch((error) => {
                         console.log("ERROR処理");
@@ -683,10 +683,10 @@ exports.updateCodingQuestion = async (req, res) => {
                     });
             })
             .catch((error) => {
-                return res.status(404).send('更新する問題がありません');
+                return res.status(401).send('更新する問題がありません');
             })
         } else {
-            return res.status(404).json({
+            return res.status(401).json({
                 "errors": [
                     {
                         "message": "Not Found"

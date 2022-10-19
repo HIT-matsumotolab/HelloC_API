@@ -16,7 +16,7 @@ exports.getUserList = async (req, res) => {
   })
     .then(users => {
       if(users[0] === undefined){
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
               {
                   "message": "Not Found"
@@ -24,7 +24,7 @@ exports.getUserList = async (req, res) => {
           ]
         });
       }
-      return res.send(users);
+      return res.status(200).send(users);
     })
     .catch((error) => {
       console.log("ERROR処理");
@@ -41,7 +41,7 @@ exports.getUser = async (req, res) => {
   })
     .then(user => {
       if(user === null){
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
               {
                   "message": "Not Found"
@@ -50,7 +50,7 @@ exports.getUser = async (req, res) => {
         });
       }
       // console.log(user);
-      return res.send(user);
+      return res.status(200).send(user);
     })
     .catch((error) => {
       console.log("ERROR処理");
@@ -70,7 +70,7 @@ exports.getGroups = async (req, res) => {
   })
     .then(result => {
       if(result[0] === undefined){
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
               {
                   "message": "Not Found"
@@ -78,7 +78,7 @@ exports.getGroups = async (req, res) => {
           ]
         });
       }
-      return res.send(result);
+      return res.status(200).send(result);
     })
     .catch((error) => {
       console.log("ERROR処理");
@@ -94,7 +94,7 @@ exports.createUser = async (req, res) => {
     role: req.body.role
   })
     .then(user => {
-      return res.status(201).send({ userId: user.user_id });
+      return res.status(201).send({ message: "User was registered successfully!" });
     })
     .catch((error) => {
       console.log("ERROR処理");

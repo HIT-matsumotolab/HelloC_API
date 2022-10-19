@@ -31,12 +31,12 @@ exports.signup = async (req, res) => {
       }
     }).then(([auth, created]) => {
       if(created) {
-        return res.status(400).send({ message: "User was registered successfully!" });
+        return res.status(201).send({ message: "User was registered successfully!" });
       }
     }).catch((error) => {
       console.log("ERROR処理");
       console.log(error);
-      return res.status(400).json({
+      return res.status(401).json({
         "errors": [
             {
                 "message": "登録できませんでした"
@@ -59,7 +59,7 @@ exports.signin = (req, res) => {
     .then(user => {
       console.log(user);
       if (!user) {
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
               {
                   "message": "Not Found"

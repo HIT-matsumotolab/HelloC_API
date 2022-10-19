@@ -202,7 +202,7 @@ exports.createDetailLog = async (req, res) => {
           return res.status(400).send(error);
         }
       }else{
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
             {
                 "message": "Formats do not match"
@@ -213,7 +213,7 @@ exports.createDetailLog = async (req, res) => {
     })
     .catch((error) => {
       console.log("ERROR処理");
-      return res.status(404).json({
+      return res.status(401).json({
         "errors": [
             {
                 "message": "Not Found"
@@ -244,7 +244,7 @@ exports.createCardDetailLog = async (req, res) => {
           return res.status(400).send(error);
         }
       }else{
-        return res.status(404).json({
+        return res.status(401).json({
           "errors": [
             {
                 "message": "Formats do not match"
@@ -255,7 +255,7 @@ exports.createCardDetailLog = async (req, res) => {
     })
     .catch((error) => {
       console.log("ERROR処理");
-      return res.status(404).json({
+      return res.status(401).json({
         "errors": [
             {
                 "message": "Not Found"
@@ -322,7 +322,7 @@ exports.deleteDetailLog = async (req, res) => {
           ]
         });
       } else {
-        return res.status(404).json({
+        return res.status(401).json({
             "errors": [
                 {
                     "message": "Not Found"
@@ -350,7 +350,7 @@ exports.deleteCardDetailLog = async (req, res) => {
         ]
       });
     } else {
-      return res.status(404).json({
+      return res.status(401).json({
           "errors": [
               {
                   "message": "Not Found"

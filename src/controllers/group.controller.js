@@ -12,7 +12,7 @@ exports.getGroupList = async (req, res) => {
     Group.findAll()
         .then(groups => {
             if(groups[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -35,7 +35,7 @@ exports.getGroup = async (req, res) => {
     })
         .then(group => {
             if(group === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -63,7 +63,7 @@ exports.getBooks = async (req, res) => {
     })
         .then(result => {
             if(result[0] === undefined){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -103,7 +103,7 @@ exports.deleteGroup = async (req, res) => {
     })
         .then(group => {
             if(group === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -134,7 +134,7 @@ exports.updateGroup = async (req, res) => {
             }, { transaction: t })
             .then(group => {
                 if(group === null){
-                    res.status(404).json({
+                    res.status(401).json({
                         "errors": [
                             {
                                 "message": "Not Found"
@@ -180,7 +180,7 @@ exports.removeUser = async (req, res) => {
     })
         .then(membership => {
             if(membership === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
@@ -220,7 +220,7 @@ exports.removeBook = async (req, res) => {
     })
         .then(collection => {
             if(collection === null){
-                return res.status(404).json({
+                return res.status(401).json({
                     "errors": [
                         {
                             "message": "Not Found"
