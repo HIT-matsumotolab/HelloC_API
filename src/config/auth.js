@@ -1,3 +1,7 @@
 module.exports = {
-    secret: "matsulab"
+    secret: "matsulab",
+    option: {
+      algorithm: 'HS256',
+      expiresIn: '24h'
+    }
   };
