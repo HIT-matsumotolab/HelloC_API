@@ -31,7 +31,10 @@ exports.signup = async (req, res) => {
       }
     }).then(([auth, created]) => {
       if(created) {
-        return res.status(201).send({ message: "User was registered successfully!" });
+        const token = jwt.sign({ user_id: auth.user_id }, config.secret, config.option);
+        return res.status(201).send({
+          accessToken: token
+        });
       }
     }).catch((error) => {
       console.log("ERROR処理");
@@ -86,9 +89,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      var token = jwt.sign({ user_id: user.user_id }, config.secret, {
-        expiresIn: 86400 // 24 hours
-      });
+      var token = jwt.sign({ user_id: user.user_id }, config.secret, config.option);
       res.status(200).send({
         user_id: user.user_id,
         name: user.name,
