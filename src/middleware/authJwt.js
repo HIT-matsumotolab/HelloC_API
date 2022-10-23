@@ -21,7 +21,7 @@ exports.verifyToken = (req, res, next) => {
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!"
+        message: err.message
       });
     }
     req.userId = decoded.user_id;
