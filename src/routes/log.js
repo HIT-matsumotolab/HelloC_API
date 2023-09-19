@@ -10,6 +10,8 @@ router
     .delete('/:id', log.deleteLogInfo)
     .put('/:id', log.updateLogInfo)
 
+    .get('/info/:question_id', log.getLogInfoByQuestionID)
+
     //detail_logs
     .get('/detail/list', log.getDetailLogInfoList)
     .post('/:id/detail', log.createDetailLog)

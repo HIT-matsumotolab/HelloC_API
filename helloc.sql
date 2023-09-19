@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS card_detail_logs(
     select_history       jsonb,
     trial               smallint,
     result_type         varchar,
+    levenshtein_distance    double precision,
     answer              jsonb,
     elapsed_time        smallint   NOT NULL,
     answer_at           timestamp  NOT NULL default CURRENT_TIMESTAMP,

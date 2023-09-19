@@ -235,12 +235,14 @@ exports.createCardDetailLog = async (req, res) => {
             select_history: req.body.select_history,
             trial: req.body.trial,
             result_type: req.body.result_type,
+            levenshtein_distance: req.body.levenshtein_distance,
             answer: req.body.answer,
             elapsed_time: req.body.elapsed_time
           });
           return res.send(log);
         } catch (error) {
           console.log("ERROR処理");
+          console.log(error)
           return res.status(400).send(error);
         }
       }else{
@@ -255,6 +257,7 @@ exports.createCardDetailLog = async (req, res) => {
     })
     .catch((error) => {
       console.log("ERROR処理");
+      console.log("feawo")
       return res.status(401).json({
         "errors": [
             {
@@ -364,3 +367,63 @@ exports.deleteCardDetailLog = async (req, res) => {
       console.log(error);
   })
 }
+exports.getLogInfoByQuestionID = async (req, res) => {
+  const { question_id } = req.params;
+
+  // データベースから指定した question_id の LogInfo を取得
+  try {
+    const logInfos = await LogInfo.findAll({
+      where: { question_id },
+    });
+
+    // ユーザーごとに情報を整形して格納するためのマップを用意
+    const userLogMap = new Map();
+
+    for (const logInfo of logInfos) {
+      const user_id = logInfo.user_id;
+      const userInfo = {
+        information_log_id: logInfo.information_log_id,
+        user_id: logInfo.user_id,
+        question_id: logInfo.question_id,
+        format: logInfo.format,
+        created_at: logInfo.created_at,
+        card_detail_logs: [],
+      };
+
+      // 対応するカード詳細ログ情報を取得
+      const cardDetailLogs = await Card_Detail_log.findAll({
+        where: { information_log_id: logInfo.information_log_id },
+      });
+
+      for (const cardDetailLog of cardDetailLogs) {
+        const cardLog = {
+          information_log_id: cardDetailLog.information_log_id,
+          card_detail_log_id: cardDetailLog.card_detail_log_id,
+          select_history: cardDetailLog.select_history,
+          trial: cardDetailLog.trial,
+          result_type: cardDetailLog.result_type,
+          levenshtein_distance: cardDetailLog.levenshtein_distance,
+          answer: cardDetailLog.answer,
+          elapsed_time: cardDetailLog.elapsed_time,
+          answer_at: cardDetailLog.answer_at,
+        };
+        userInfo.card_detail_logs.push(cardLog);
+      }
+
+      if (!userLogMap.has(user_id)) {
+        userLogMap.set(user_id, { user_id, info: [] });
+      }
+
+      userLogMap.get(user_id).info.push(userInfo);
+    }
+
+    // マップから値だけを取り出して JSON 配列に変換
+    const result = Array.from(userLogMap.values());
+
+    // 結果をJSONで返す
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log("ERROR処理");
+    return res.status(400).send(error);
+  }
+};

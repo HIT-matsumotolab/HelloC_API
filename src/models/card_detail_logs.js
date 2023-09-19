@@ -26,6 +26,10 @@ export default class card_detail_logs extends Model {
       type: DataTypes.SMALLINT,
       allowNull: true
     },
+    levenshtein_distance: {
+      type: DataTypes.DOUBLE,
+      allowNull: true
+    },
     result_type: {
       type: DataTypes.STRING,
       allowNull: true,
